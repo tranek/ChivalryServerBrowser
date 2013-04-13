@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	
+	<script type="text/javascript"
+		src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false">
+    </script>
+	
+	<script type="text/javascript">
+		$(function() {
+			alert("jquery works!");
+			initialize();
+			
+			/*$("#javatest").click(function() {
+				window.alert("jquery click works");
+			});*/
+		});
+		
+		function loaded() {
+			window.alert("loaded");
+		}
+		
+		var map;
+		function initialize() {
+			var mapOptions = {
+				zoom: 2,
+				minZoom: 2,
+				center: new google.maps.LatLng(17.8, -6.9),
+				streetViewControl: false,
+				panControl: false,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			map = new google.maps.Map(document.getElementById('map_canvas'),
+			mapOptions);			
+		}
+		
+		function javacall(msg) {
+			alert("Calls to javascript from java work! msg = " + msg);
+		}
+
+		function addUserLoc(lat, lon) {
+			alert("Adding user location to map: " + lat + ", " + lon);
+			var pos = new google.maps.LatLng(lat, lon);
+			
+			// Image for the user
+			var image = new google.maps.MarkerImage('images/mason_maa_small.png',
+				// This marker is 20 pixels wide by 32 pixels tall.
+				new google.maps.Size(50, 66),
+				// The origin for this image is 0,0.
+				new google.maps.Point(0,0),
+				// The anchor for this image is the center of the image at (25, 33)
+				new google.maps.Point(25, 33)
+			);
+			
+			var user = new google.maps.Marker({
+				position: pos,
+				map: map,
+				icon: image,
+				// anchor: new google.maps.Point(0, 32)),
+				title:" Your Current Location"    
+			});
+		}
+		
+		var servermarkers = new Array();
+		function addMarker(lat, lon, html) {
+			alert("Adding marker at " + lat + ", " + lon + " html: " + html);
+		
+			var markerOptions = {
+				position: new google.maps.LatLng(lat, lon),
+				title: html,
+				map: map,
+				html: html
+			};
+			var marker = new google.maps.Marker(markerOptions);
+
+			var markerIW = new google.maps.InfoWindow(
+			{ 
+				//content: html
+				//size: new google.maps.Size(50,50)
+			});
+			
+			google.maps.event.addListener(marker, 'click', function() {
+				markerIW.setContent(this.html);
+				markerIW.open(map, this);
+
+				//getPlayersForMarker(markerIW, this.html, this.serverid, this.serverip, this.serverqp);
+				
+			});
+			
+			// Add marker to global marker array
+			servermarkers.push(marker);
+		}
+	
+	</script>
+</head>
+<body onload="loaded()">
+	<!--<p>MAP HTML!!!</p>
+	<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+	-->
+	<button id="javatest" onclick="app.hello()">Upcall to Java</button>
+	<p><a href="javascript:void()" onclick="app.hello()">Exit the Application</a></p> 
+	<div id="map_canvas" style="width:800px; height:600px;"></div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+package com.tranek.chivalryserverbrowser;
+import javax.swing.table.DefaultTableModel;
+
+public class RefresherBeta extends Thread {
+	
+	private MainWindow mw;
+	private MasterServerQueryBeta msqB;
+	private ServerListBetaTab slb;
+	
+	public RefresherBeta(MainWindow mw, ServerListBetaTab slb) {
+		this.mw = mw;
+		this.slb = slb;
+		msqB = new MasterServerQueryBeta(this.mw, slb.sfB);
+	}
+	
+	public void run() {
+		try {
+			System.out.println("Refreshing beta servers...");
+			String mctext = mw.messageCenter.getText();
+			if ( mctext.equals("") ) {
+				mw.printMC("Refreshing beta servers...");
+			} else {
+				mw.printlnMC("Refreshing beta servers...");
+			}
+			
+			msqB.queryMasterServer(slb.sfB, (DefaultTableModel)slb.st.dataModel);
+			
+			if ( mw.serversB != null ) {
+				int count = 0;
+				for (ChivServer cs : mw.serversB){
+					count += Integer.parseInt(cs.mCurrentPlayers);
+				}
+				System.out.println("Retrieved " + mw.serversB.size() + " beta servers with " + count + " players playing.");
+				mw.printlnMC("Retrieved " + mw.serversB.size() + " beta servers with " + count + " players playing.");
+			} else {
+				System.out.println("Retrieved 0 beta servers.");
+				mw.printlnMC("Retrieved 0 beta servers.");
+			}
+			
+			System.out.println("Finished refreshing beta servers.");
+			mw.printlnMC("Finished refreshing beta servers.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void stopRefreshing(MainWindow mw) {
+		msqB.stopRefreshing(mw);
+		if ( mw.serversB != null ) {
+			int count = 0;
+			for (ChivServer cs : mw.serversB){
+				count += Integer.parseInt(cs.mCurrentPlayers);
+			}
+			System.out.println("Retrieved " + mw.serversB.size() + " beta servers with " + count + " players playing.");
+			mw.printlnMC("Retrieved " + mw.serversB.size() + " beta servers with " + count + " players playing.");
+		} else {
+			System.out.println("Retrieved 0 servers.");
+			mw.printlnMC("Retrieved 0 servers.");
+		}
+	}
+	
+	public boolean isRefreshing() {
+		return !msqB.pool.isShutdown();
+	}
+	
+}

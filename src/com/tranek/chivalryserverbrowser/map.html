@@ -1,0 +1,337 @@
+<!doctype html>
+<html>
+<head>
+	<style>
+      html, body, #map_canvas {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+    </style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	
+	<script type="text/javascript"
+		src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization">
+    </script>
+	
+	<script type="text/javascript">
+		$(function() {
+			alert("jquery works!");
+			initialize();
+			
+			/*$("#javatest").click(function() {
+				window.alert("jquery click works");
+			});*/
+		});
+		
+		function loaded() {
+			window.alert("loaded");
+		}
+		
+		var map, playerheatmap;
+		function initialize() {
+			var mapOptions = {
+				zoom: 2,
+				minZoom: 2,
+				center: new google.maps.LatLng(17.8, -6.9),
+				streetViewControl: false,
+				panControl: false,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			map = new google.maps.Map(document.getElementById('map_canvas'),
+			mapOptions);			
+		}
+		
+		function javacall(msg) {
+			alert("Calls to javascript from java work! msg = " + msg);
+		}
+
+		function addUserLoc(lat, lon) {
+			alert("Adding user location to map: " + lat + ", " + lon);
+			var pos = new google.maps.LatLng(lat, lon);
+			
+			// Image for the user
+			var image = new google.maps.MarkerImage('images/mason_maa_small.png',
+				// This marker is 20 pixels wide by 32 pixels tall.
+				new google.maps.Size(50, 66),
+				// The origin for this image is 0,0.
+				new google.maps.Point(0,0),
+				// The anchor for this image is the center of the image at (25, 33)
+				new google.maps.Point(25, 33)
+			);
+			
+			var user = new google.maps.Marker({
+				position: pos,
+				map: map,
+				icon: image,
+				// anchor: new google.maps.Point(0, 32)),
+				title:" Your Current Location"    
+			});
+		}
+		
+		/*
+		http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png
+		http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png
+		http://www.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png
+		http://www.google.com/intl/en_us/mapfiles/ms/micons/yellow-dot.png
+		*/
+		
+		var servermarkers = new Array();
+		var serverbetamarkers = new Array();
+		var serverfavmarkers = new Array();
+		var serverhistmarkers = new Array();
+		var servermarkersingle;
+		function addMarker(lat, lon, type, title, html, players) {
+			if ( type == 'n' ) {
+				for ( var obj in servermarkers ) {
+					var marker = servermarkers[obj];
+					if ( marker.html == html ) {
+						return;
+					}
+				}
+			} else if ( type == 'b' ) {
+				for ( var obj in serverbetamarkers ) {
+					var marker = serverbetamarkers[obj];
+					if ( marker.html == html ) {
+						return;
+					}
+				}
+			} else if ( type == 'f' ) {
+				for ( var obj in serverfavmarkers ) {
+					var marker = serverfavmarkers[obj];
+					if ( marker.html == html ) {
+						return;
+					}
+				}
+			} else if ( type == 'h' ) {
+				for ( var obj in serverhistmarkers ) {
+					var marker = serverhistmarkers[obj];
+					if ( marker.html == html ) {
+						return;
+					}
+				}
+			} else if ( type == "s" && servermarkersingle != null ) {
+				clearMarkers('s');
+			}
+		
+			//alert("Adding marker at " + lat + ", " + lon + " html: " + html);
+		
+			/*http://stackoverflow.com/questions/7095574/google-maps-api-3-custom-marker-color-for-default-dot-marker*/
+			var pinColor = "FE7569";
+			
+			if ( type == "n" ) {
+				pinColor = "FE7569"; //red
+			} else if ( type == "b" ) {
+				pinColor = "6370FF"; //blue
+			} else if ( type == "f" ) {
+				pinColor = "62E373"; //green
+			} else if ( type == "h" ) {
+				pinColor = "FBFF7A"; //yellow
+			} else if ( type == "s" ) {
+				pinColor = "FFFFFF"; //white
+			}
+			
+			var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+				new google.maps.Size(21, 34),
+				new google.maps.Point(0,0),
+				new google.maps.Point(10, 34));
+			var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+				new google.maps.Size(40, 37),
+				new google.maps.Point(0, 0),
+				new google.maps.Point(12, 35));
+		
+			var markerOptions;
+			if ( type == 's' ) {
+				markerOptions = {
+					position: new google.maps.LatLng(lat, lon),
+					title: title,
+					map: map,
+					icon: pinImage,
+					zIndex: 9999,
+					sl: 's',
+					players: players,
+					html: html
+				};
+			} else if ( type == 'f' ) {
+				markerOptions = {
+					position: new google.maps.LatLng(lat, lon),
+					title: title,
+					map: map,
+					icon: pinImage,
+					zIndex: 9998,
+					sl: 'f',
+					players: players,
+					html: html
+				};
+			} else if ( type == 'h' ) {
+				markerOptions = {
+					position: new google.maps.LatLng(lat, lon),
+					title: title,
+					map: map,
+					icon: pinImage,
+					zIndex: 9997,
+					sl: 'h',
+					players: players,
+					html: html
+				};
+			} else if ( type == 'b' ) {
+				markerOptions = {
+					position: new google.maps.LatLng(lat, lon),
+					title: title,
+					map: map,
+					icon: pinImage,
+					zIndex: 9996,
+					sl: 'b',
+					players: players,
+					html: html
+				};
+			} else {
+				markerOptions = {
+					position: new google.maps.LatLng(lat, lon),
+					title: title,
+					map: map,
+					icon: pinImage,
+					sl: 'n',
+					players: players,
+					html: html
+				};
+			}
+			var marker = new google.maps.Marker(markerOptions);
+
+			var markerIW = new google.maps.InfoWindow(
+			{ 
+				//content: html
+				//size: new google.maps.Size(50,50)
+			});
+			
+			google.maps.event.addListener(marker, 'click', function() {
+				markerIW.setContent(this.html);
+				markerIW.open(map, this);
+
+				//getPlayersForMarker(markerIW, this.html, this.serverid, this.serverip, this.serverqp);
+				
+			});
+			
+			// Add marker to global marker array
+			if ( type == "n" ) {
+				servermarkers.push(marker);
+			} else if ( type == "b" ) {
+				serverbetamarkers.push(marker);
+			} else if ( type == "f" ) {
+				serverfavmarkers.push(marker);
+			} else if ( type == "h" ) {
+				serverhistmarkers.push(marker);
+			} else if ( type == "s" ) {
+				servermarkersingle = marker;
+			}
+		}
+		
+		// Clears all markers
+		// Probably add heatmaps to this when they are implemented or a separate function
+		function clearMarkers(type) {
+			if ( type == "n" ) {
+				alert("Clearing normal markers from map.");
+				for (var i=0; i<servermarkers.length; i++) {
+					servermarkers[i].setMap(null);
+				}
+				servermarkers = new Array();
+			} else if ( type == "b" ) {
+				alert("Clearing beta markers from map.");
+				for (var i=0; i<serverbetamarkers.length; i++) {
+					serverbetamarkers[i].setMap(null);
+				}
+				serverbetamarkers = new Array();
+			} else if ( type == "f" ) {
+				alert("Clearing favorite markers from map.");
+				for (var i=0; i<serverfavmarkers.length; i++) {
+					serverfavmarkers[i].setMap(null);
+				}
+				serverfavmarkers = new Array();
+			} else if ( type == "h" ) {
+				alert("Clearing history markers from map.");
+				for (var i=0; i<serverhistmarkers.length; i++) {
+					serverhistmarkers[i].setMap(null);
+				}
+				serverhistmarkers = new Array();
+			} else if ( type == "s" ) {
+				alert("Clearing single marker from map.");
+				servermarkersingle.setMap(null);
+			}
+		}
+		
+		function showIW() {
+			google.maps.event.trigger(servermarkersingle, 'click');
+		}
+		
+		function moreInfoTab(ip, sl) {
+			app.addServerTabJS(ip, sl);
+		}
+		
+		function enablePlayerHeatMap() {
+			var playerdata = new Array();
+			if ( servermarkers != null) {
+				for ( var i=0; i<servermarkers.length; i++ ) {
+					var markerplayers = servermarkers[i].players;
+					var markerpos = servermarkers[i].position;
+					playerdata.push({
+						location: new google.maps.LatLng(markerpos.lat(), markerpos.lng()),
+						weight: markerplayers
+					});
+				}
+			}
+			if ( serverbetamarkers != null ) {
+				for ( var i=0; i<serverbetamarkers.length; i++ ) {
+					var markerplayers = serverbetamarkers[i].players;
+					var markerpos = serverbetamarkers[i].position;
+					playerdata.push(new google.maps.visualization.WeightedLocation({
+						location: new google.maps.LatLng(markerpos.lat(), markerpos.lng()),
+						weight: markerplayers
+					}));
+				}
+			}
+			if ( serverfavmarkers != null ) {
+				for ( var i=0; i<serverfavmarkers.length; i++ ) {
+					var markerplayers = serverfavmarkers[i].players;
+					var markerpos = serverfavmarkers[i].position;
+					playerdata.push(new google.maps.visualization.WeightedLocation({
+						location: new google.maps.LatLng(markerpos.lat(), markerpos.lng()),
+						weight: markerplayers
+					}));
+				}
+			}
+			if ( serverhistmarkers != null ) {
+				for ( var i=0; i<serverhistmarkers.length; i++ ) {
+					var markerplayers = serverhistmarkers[i].players;
+					var markerpos = serverhistmarkers[i].position;
+					playerdata.push(new google.maps.visualization.WeightedLocation({
+						location: new google.maps.LatLng(markerpos.lat(), markerpos.lng()),
+						weight: markerplayers
+					}));
+				}
+			}
+			
+			playerheatmap = new google.maps.visualization.HeatmapLayer({
+				data: playerdata,
+				dissipating: false,
+				radius: 10
+			});
+
+			playerheatmap.setMap(map);
+		}
+		
+		function disablePlayerHeatMap() {
+			playerheatmap.setMap(null);
+		}
+		
+		function joinServer(ip, queryport) {
+			app.joinServerJS(ip, queryport);
+		}
+	
+	</script>
+</head>
+<body onload="loaded()">
+	<!--<div id="map_canvas" style="width:995px; height:530px; margin:0; padding:0;"></div>-->
+	<div id="map_canvas"></div>
+</body>
+</html>
