@@ -1,2 +1,10 @@
 Chivalry: Medieval Warfare Alternate Server Browser
 http://www.chivalrythegame.com/forums/viewtopic.php?f=69&t=10664
+
+This application uses open source libraries to query the Master Steam Server and the game servers.
+Steam Condenser by koraktor
+http://koraktor.de/steam-condenser/
+https://github.com/koraktor/steam-condenser
+
+Game Server Library by Barker Jr
+http://www.barkerjr.net/gameserver.html
