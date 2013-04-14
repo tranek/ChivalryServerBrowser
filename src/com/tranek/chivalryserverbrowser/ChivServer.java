@@ -3,7 +3,11 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
 
-
+/**
+ * 
+ * Represents a Chivalry: Medieval Warfare server.
+ *
+ */
 public class ChivServer {
 
 	public String mName;

@@ -35,7 +35,7 @@ public class MasterServerQueryBeta {
 	public Vector<ChivServer> queryMasterServer(ServerFilters sf, DefaultTableModel dataModel) throws IOException, InterruptedException {
 		this.sf = sf;
 		slist = new Vector<ChivServer>();
-		synch = new Synchronizer(dataModel, mw.serversB, mw);
+		synch = new Synchronizer(dataModel, mw.serversBeta, mw);
 		pool = Executors.newFixedThreadPool(sf.numThreads);
 		
 		SourceServerList list = new SourceServerList();

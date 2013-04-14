@@ -53,35 +53,43 @@ import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteStatement;
 
-
+/**
+ * 
+ *The main class that creates the frame and all other components.
+ *It also contains useful utility functions used by it and other
+ *classes.
+ *
+ *
+ */
 public class MainWindow {
 
-	public JFrame frmChivalryServers;
+	/** The JFrame for the application. */
+	protected JFrame frmChivalryServers;
 	private boolean firstTimeShown = true;
-	public JTextArea messageCenter;
-	public Vector<ChivServer> servers = new Vector<ChivServer>();
-	public Vector<ChivServer> serversB = new Vector<ChivServer>();
-	public Vector<ChivServer> serversFav = new Vector<ChivServer>();
-	public Vector<ChivServer> serversHist = new Vector<ChivServer>();
-	public Vector<ChivServer> serversFriends;
-	public ChivServer mapShownServer;
+	protected JTextArea messageCenter;
+	protected Vector<ChivServer> servers = new Vector<ChivServer>();
+	protected Vector<ChivServer> serversBeta = new Vector<ChivServer>();
+	protected Vector<ChivServer> serversFav = new Vector<ChivServer>();
+	protected Vector<ChivServer> serversHist = new Vector<ChivServer>();
+	protected Vector<ChivServer> serversFriends;
+	protected ChivServer mapShownServer;
 	private MainWindow mw;
 	private JScrollPane messageScrollPane;
-	public JTabbedPane tabbedPane;
-	public ServerListTab serverListTab;
-	public ServerListBetaTab serverListBetaTab;
-	public ServerListFavTab serverListFavTab;
-	public ServerListHistoryTab serverListHistoryTab;
-	public FriendsTab friendsTab;
-	public JPanel mapTab;
-	public JPanel gamepadKeybindTab;
-	public SettingsTab settingsTab;
-	public JFXPanel browserFxPanel;
-	public WebEngine webEngine;
-	public JCheckBox chckbxNormalServers;
-	public JCheckBox chckbxBetaServers;
-	public JCheckBox chckbxFavoriteServers;
-	public JCheckBox chckbxServerHistory;
+	protected JTabbedPane tabbedPane;
+	protected ServerListTab serverListTab;
+	protected ServerListBetaTab serverListBetaTab;
+	protected ServerListFavTab serverListFavTab;
+	protected ServerListHistoryTab serverListHistoryTab;
+	protected FriendsTab friendsTab;
+	protected JPanel mapTab;
+	protected JPanel gamepadKeybindTab;
+	protected SettingsTab settingsTab;
+	protected JFXPanel browserFxPanel;
+	protected WebEngine webEngine;
+	protected JCheckBox chckbxNormalServers;
+	protected JCheckBox chckbxBetaServers;
+	protected JCheckBox chckbxFavoriteServers;
+	protected JCheckBox chckbxServerHistory;
 	private JToggleButton tglbtnTogglePlayerHeat;
 
 	/**
@@ -155,7 +163,7 @@ public class MainWindow {
 		chckbxBetaServers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if ( chckbxBetaServers.isSelected() ) {
-					for ( ChivServer cs : serversB ) {
+					for ( ChivServer cs : serversBeta ) {
 						addMarker(serverListBetaTab, cs);
 					}
 				} else {
@@ -340,17 +348,33 @@ public class MainWindow {
 		}
 	}
 
+	/**
+	 * Prints a single line of text to the {@link MainWindow#messageCenter}
+	 * without adding a new line before it.
+	 * 
+	 * @param msg - the String to be printed
+	 * @see #checkMCBuffer()
+	 */
 	public void printMC(String msg) {
 		checkMCBuffer();
 		messageCenter.append(msg);
 	}
 	
+	/**
+	 * Prints a single line of text to the {@link MainWindow#messageCenter}
+	 * with adding a new line before it.
+	 * 
+	 * @param msg - the String to be printed
+	 * @see #checkMCBuffer()
+	 */
 	public void printlnMC(String msg) {
 		checkMCBuffer();
 		messageCenter.append("\n" + msg);
 	}
 	
-	// Keep messageCenter at no more than 30 lines
+	/**
+	 * Keeps the {@link MainWindow#messageCenter} at no more than 30 lines of text.
+	 */
 	public void checkMCBuffer() {
 		String mctext = messageCenter.getText();
 		String[] numlines = mctext.split("\\r?\\n");
@@ -363,6 +387,10 @@ public class MainWindow {
 		}
 	}
 	
+	/**
+	 * Saves all tabs' filters and the application's settings before exiting
+	 * the application.
+	 */
 	public void exit() {
 		serverListTab.saveFilters();
 		serverListBetaTab.saveFilters();
@@ -373,12 +401,21 @@ public class MainWindow {
 		System.exit(0);
 	}
 	
+	/**
+	 * Returns the {@link ChivServer} for the given ip address, gameport, and ServerListInterface.
+	 * 
+	 * @param ip - the ip address of the {@link ChivServer}
+	 * @param gameport - the gameport of the {@link ChivServer}
+	 * @param sl - the {@link ServerListInterface} that requested the lookup
+	 * @return	the {@link ChivServer} if found, null otherwise
+	 * @see #findChivServer(String, String, Vector)
+	 */
 	public ChivServer findChivServer(String ip, String gameport, ServerListInterface sl) {
 		Vector<ChivServer> s = null;
 		if ( sl == serverListTab ) {
 			s = servers;
 		} else if ( sl == serverListBetaTab ) {
-			s = serversB;
+			s = serversBeta;
 		} else if ( sl == serverListFavTab ) {
 			s = serversFav;
 		} else if ( sl == serverListHistoryTab ) {
@@ -388,6 +425,14 @@ public class MainWindow {
 		return findChivServer(ip, gameport, s);
 	}
 	
+	/**
+	 * Returns the {@link ChivServer} for the given ip address, gameport, and list of servers.
+	 * 
+	 * @param ip - the ip address of the {@link ChivServer}
+	 * @param gameport - the gameport of the {@link ChivServer}
+	 * @param servers - the {@link Vector} of {@link ChivServer} to look in
+	 * @return	the {@link ChivServer} if found, null otherwise
+	 */
 	public ChivServer findChivServer(String ip, String gameport, Vector<ChivServer> servers) {
 		if ( servers != null ) {
 			for ( ChivServer cs : servers ) {
@@ -399,11 +444,22 @@ public class MainWindow {
 		return null;
 	}
 
+	/**
+	 * Adds a {@link ButtonTabComponent} to a tab to close the tab.
+	 * 
+	 * @param pane - the {@link JTabbedPane} with the tabs
+	 * @param i	the index of the tab to add the button component to
+	 */
 	private void initTabComponent(JTabbedPane pane, int i) {
         pane.setTabComponentAt(i,
                  new ButtonTabComponent(pane));
     }
 	
+	/**
+	 * Calls {@link #initTabComponent(JTabbedPane, int)} on all the standard tabs.
+	 * 
+	 * @see #initTabComponent(JTabbedPane, int)
+	 */
 	private void addMajorTabComponent() {
 		int numtabs = tabbedPane.getTabCount();
 		if ( numtabs > 2) {
@@ -413,6 +469,14 @@ public class MainWindow {
 		}
 	}
 	
+	/**
+	 * Adds a new tab with details about a specific server.
+	 * 
+	 * @param ip_port - a string of the "ipaddress:gameport" of the server
+	 * @param sl - the {@link ServerListInterface} that called this method
+	 * @param switchToTab - whether or not to automatically switch to the new tab
+	 * @see #addServerTab(ChivServer, boolean)
+	 */
 	public void addServerTab(String ip_port, ServerListInterface sl, boolean switchToTab) {
 		String stripped = ip_port;
 		stripped = stripped.split("<")[0];
@@ -425,20 +489,46 @@ public class MainWindow {
 		}
 	}
 	
-	public void addServerTabShownServer(String ip_port, boolean switchToTab) {
+	/**
+	 * Adds a new tab with details about the server that is currently shown on the map (white marker).
+	 * 
+	 * @param switchToTab - whether or not to automatically switch to the new tab
+	 * @see #addServerTab(ChivServer, boolean)
+	 */
+	public void addServerTabShownServer(boolean switchToTab) {
 		ChivServer cs = mapShownServer;
 		if ( cs != null ) {
 			addServerTab(cs, switchToTab);
 		}
 	}
 	
+	/**
+	 * Adds a new tab with details about a specific server. It looks up the
+	 * "ipaddress:gameport" combination from the database of previously seen
+	 * servers. If the server is not found, it does nothing.
+	 * 
+	 * @param ip_port - the "ipaddress:gameport" of the server
+	 * @param switchToTab - whether or not to automatically switch to the new tab
+	 * @see #addServerTab(ChivServer, boolean)
+	 */
 	public void addServerTab(String ip_port, boolean switchToTab) {
 		String ip = ip_port.split(":")[0];
 		String gameport = ip_port.split(":")[1];
 		ChivServer cs = getServerFromDB(ip, gameport);
-		addServerTab(cs, switchToTab);
+		if ( cs != null ) {
+			addServerTab(cs, switchToTab);
+		} else {
+			printlnMC("Server not found in database. Please refresh all servers to update the database.");
+		}
 	}
 	
+	/**
+	 * Adds a new tab with details about a specific server.
+	 * 
+	 * @param cs - the {@link ChivServer} of the new tab
+	 * @param switchToTab - whether or not to automatically switch to the new tab
+	 * @see #initTabComponent(JTabbedPane, int)
+	 */
 	public void addServerTab(ChivServer cs, boolean switchToTab) {
 		if ( cs != null) {
 			boolean tabExists = false;
@@ -466,6 +556,17 @@ public class MainWindow {
 		}
 	}
 	
+	/**
+	 * The method that the map javascript calls to add a new tab with details
+	 * about a specific server. Since javascript can't send actual java objects,
+	 * it includes a string parameter representing the server list tab where
+	 * this server could be found in a lookup.
+	 * 
+	 * @param ip_port - the "ipaddress:gameport" of the server
+	 * @param sl - a string denoting which server list tab that this server originally came from
+	 * @see #addServerTab(ChivServer, boolean)
+	 * @see #addServerTabShownServer(boolean)
+	 */
 	public void addServerTabJS(String ip_port, String sl) {
 		if ( sl.equals("n") ) {
 			addServerTab(ip_port, serverListTab, true);
@@ -476,10 +577,18 @@ public class MainWindow {
 		} else if ( sl.equals("h") ) {
 			addServerTab(ip_port, serverListBetaTab, true);
 		} else if ( sl.equals("s") ) {
-			addServerTabShownServer(ip_port, true);
+			addServerTabShownServer(true);
 		}
 	}
 	
+	/**
+	 * Adds a {@link ChivServer} as a favorite server to the database.
+	 * 
+	 * @param cs - the {@link ChivServer} to add
+	 * @see SQLiteConnection
+	 * @see SQLiteStatement
+	 * @see SQLiteException
+	 */
 	public void addFavorite(ChivServer cs) {
 		
 		printlnMC("Adding server to favorites...");
@@ -537,6 +646,15 @@ public class MainWindow {
 		db.dispose();
 	}
 
+	/**
+	 * Removes a {@link ChivServer} from the favorites database.
+	 * 
+	 * @param cs - the {@link ChivServer} to remove
+	 * @return if the server was successfully found and removed
+	 * @see SQLiteConnection
+	 * @see SQLiteStatement
+	 * @see SQLiteException
+	 */
 	public boolean removeFavorite(ChivServer cs) {
 		boolean removed = false;
 		System.out.println("Removing from favorites...");
@@ -599,23 +717,36 @@ public class MainWindow {
 		return removed;
 	}
 	
+	/**
+	 * Stops all server list tabs from refreshing.
+	 * 
+	 * @see Refresher
+	 * @see RefresherBeta
+	 * @see RefresherFav
+	 * @see RefresherHistory
+	 */
 	public void stopAllRefreshing() {
 		serverListTab.refresher.stopRefreshing(mw);
-		//serverListTab.refresher = new Refresher(mw, serverListTab);
 		if ( serverListBetaTab.refresher != null ) {
 			serverListBetaTab.refresher.stopRefreshing(mw);
-			//serverListBetaTab.refresherB = new RefresherBeta(mw, serverListBetaTab);
 		}
 		if ( serverListFavTab.refresher != null ) {
 			serverListFavTab.refresher.stopRefreshing(mw);
-			//serverListFavTab.refresher = new RefresherFav(mw, serverListFavTab);
 		}
 		if ( serverListHistoryTab.refresher != null ) {
 			serverListHistoryTab.refresher.stopRefreshing(mw);
-			//serverListHistoryTab.refresher = new RefresherHistory(mw, serverListHistoryTab);
 		}
 	}
 
+	/**
+	 * Adds a {@link ChivServer} to the server history database. This is typically called
+	 * when the user joins a server.
+	 * 
+	 * @param cs - the {@link ChivServer} to add
+	 * @see SQLiteConnection
+	 * @see SQLiteStatement
+	 * @see SQLiteException
+	 */
 	public void addServerToHistory(ChivServer cs) {
 		System.out.println("Adding server to history list.");
 		SQLiteConnection db = new SQLiteConnection(new File("browserdb"));
@@ -669,6 +800,15 @@ public class MainWindow {
 		db.dispose();
 	}
 	
+	/**
+	 * Removes a {@link ChivServer} from the history database.
+	 * 
+	 * @param cs - the {@link ChivServer} to remove
+	 * @return if the {@link ChivServer} was successfully found and removed
+	 * @see SQLiteConnection
+	 * @see SQLiteStatement
+	 * @see SQLiteException
+	 */
 	public boolean removeServerFromHistory(ChivServer cs) {
 		boolean removed = false;
 		System.out.println("Removing from history...");
@@ -731,12 +871,37 @@ public class MainWindow {
 		return removed;
 	}
 
-	//IF map causes lag, can load a blank page on join game
+	/**
+	 * Launches the game and joins a specific server via the Steam URL.
+	 * 
+	 * @param urlstring - the Steam URL to launch the game and join the server
+	 * @param ip - the ip address of the server
+	 * @param port - the gameport of the server
+	 * @param serverName - the name of the server
+	 * @param sl - the {@link ServerListInterface} where this server is found for lookup
+	 * @see ChivServer
+	 * @see #findChivServer(String, String, ServerListInterface)
+	 * @see #joinServer(String, String, String, String, ChivServer)
+	 */
 	public void joinServer(String urlstring, String ip, String port, String serverName, ServerListInterface sl) {
 		ChivServer cs = findChivServer(ip, port, sl);
 		joinServer(urlstring, ip, port, serverName, cs);
 	}
 	
+	/**
+	 * Launches the game ad joins a specific server via the Steam URL.
+	 * 
+	 * @param urlstring - the Steam URL to launch the game and join the server
+	 * @param ip - the ip address of the server
+	 * @param port - the gameport of the server
+	 * @param serverName - the name of the server
+	 * @param cs - the {@link ChivServer} to join
+	 * @see Desktop
+	 * @see URI
+	 * @see #addServerToHistory(ChivServer)
+	 * @see #saveGameConfig()
+	 * @see #getLaunchOptions()
+	 */
 	public void joinServer(String urlstring, String ip, String port, String serverName, ChivServer cs) {
 		saveGameConfig();
 		Desktop dt = Desktop.getDesktop();
@@ -753,6 +918,18 @@ public class MainWindow {
 		}
 	}
 	
+	/**
+	 * Launches the game and joins a specific server via the Steam URL that a Steam friend is playing on.
+	 * 
+	 * @param urlstring	- the Steam URL to launch the game and join the server
+	 * @param ip - the ip address of the server
+	 * @param port - the gameport of the server
+	 * @param friendName - the name of the Steam friend on the server
+	 * @see Desktop
+	 * @see URI
+	 * @see #saveGameConfig()
+	 * @see #getLaunchOptions()
+	 */
 	public void joinServer(String urlstring, String ip, String port, String friendName) {
 		saveGameConfig();
 		Desktop dt = Desktop.getDesktop();
@@ -767,6 +944,14 @@ public class MainWindow {
 		}
 	}
 
+	/**
+	 * Method called by the map's javascript to join a specific server via the Steam URL.
+	 * 
+	 * @param ip - the ip of the server
+	 * @param queryport - the queryport of the server
+	 * @see ChivServer
+	 * @see #joinServer(String, String, String, String, ChivServer)
+	 */
 	public void joinServerJS(String ip, String queryport) {
 		ChivServer cs = ChivServer.createChivServer(mw, ip, Integer.parseInt(queryport));
 		String urlstring = "";
@@ -782,6 +967,13 @@ public class MainWindow {
 		}
 	}
 	
+	/**
+	 * Loads the application settings from the database.
+	 * 
+	 * @see SQLiteConnection
+	 * @see SQLiteStatement
+	 * @see SQLiteException
+	 */
 	public void loadSettings() {
 		SQLiteConnection db = new SQLiteConnection(new File("browserdb"));
 		try {
@@ -881,6 +1073,13 @@ public class MainWindow {
 		db.dispose();
 	}
 
+	/**
+	 * Saves the application settings to the database.
+	 * 
+	 * @see SQLiteConnection
+	 * @see SQLiteStatement
+	 * @see SQLiteException
+	 */
 	public void saveSettings() {
 		SQLiteConnection db = new SQLiteConnection(new File("browserdb"));
 		try {
@@ -990,6 +1189,14 @@ public class MainWindow {
 		db.dispose();
 	}
 
+	/**
+	 * Creates the JavaFX scene for the Map tab. It creates a new {@link WebEngine} and loads the
+	 * map.html resource.
+	 * 
+	 * @see WebView
+	 * @see JSObject#setMember(String, Object)
+	 * @see #browserFxPanel
+	 */
 	private void createScene() {	
 		Platform.runLater(new Runnable() {		
 			@Override
@@ -1037,6 +1244,14 @@ public class MainWindow {
 		});
 	}
 	
+	/**
+	 * Gets the location of the user by querying http://checkip.amazonaws.com.
+	 * 
+	 * @return the latitude and longitude of the user
+	 * @see URL
+	 * @see LocationRIPE#getLocation(String)
+	 * @see HashMap
+	 */
 	public HashMap<String, String> getLoc() {
 		try {
 			URL whatismyip = new URL("http://checkip.amazonaws.com");
@@ -1057,6 +1272,12 @@ public class MainWindow {
 		return null;
 	}
 	
+	/**
+	 * Removes all markers from the map from servers found in the server list tab.
+	 * 
+	 * @param sl - the {@link ServerListInterface} with the markers to remove from the map
+	 * @see WebEngine#executeScript(String)
+	 */
 	public void removeMarkers(final ServerListInterface sl) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -1078,6 +1299,13 @@ public class MainWindow {
 		});
 	}
 	
+	/**
+	 * Adds a marker for a given {@link ChivServer} to the map.
+	 * 
+	 * @param sl - the {@link ServerListInterface} that the {@link ChivServer} came from
+	 * @param cs - the {@link ChivServer} to add to the map as a marker
+	 * @see WebEngine#executeScript(String)
+	 */
 	public void addMarker(final ServerListInterface sl, final ChivServer cs) {
 		if ( !cs.mLatitude.equals("") && !cs.mLongitude.equals("") ) {
 			Platform.runLater(new Runnable() {
@@ -1124,9 +1352,13 @@ public class MainWindow {
 		}
 	}
 	
+	/**
+	 * Shows a specific {@link ChivServer} on the map as a white marker.
+	 * 
+	 * @param cs - the {@link ChivServer} to show
+	 * @see WebEngine#executeScript(String)
+	 */
 	public void showInMap(final ChivServer cs) {
-		/*tabbedPane.addTab("Map", null, mapTab, null);
-		initTabComponent(tabbedPane, tabbedPane.getTabCount()-1);*/
 		mapShownServer = cs;
 		Platform.runLater(new Runnable() {
 			@Override
@@ -1154,6 +1386,12 @@ public class MainWindow {
 		tabbedPane.setSelectedComponent(mapTab);
 	}
 	
+	/**
+	 * Enables the player heatmap on the map.
+	 * 
+	 * @see WebEngine#executeScript(String)
+	 * @see "https://developers.google.com/maps/documentation/javascript/reference#HeatmapLayer"
+	 */
 	public void enablePlayerHeatMap() {
 		System.out.println("enable player heat map called");
 		Platform.runLater(new Runnable() {
@@ -1164,6 +1402,12 @@ public class MainWindow {
 		});
 	}
 	
+	/**
+	 * Disables the player heatmap on the map.
+	 * 
+	 * @see WebEngine#executeScript(String)
+	 * @see "https://developers.google.com/maps/documentation/javascript/reference#HeatmapLayer"
+	 */
 	public void disablePlayerHeatMap() {
 		System.out.println("disable player heat map called");
 		Platform.runLater(new Runnable() {
@@ -1174,6 +1418,11 @@ public class MainWindow {
 		});
 	}
 	
+	/**
+	 * Gets the launch options from the Settings tab to be applied to joining a server.
+	 * 
+	 * @return the launch options as a String
+	 */
 	public String getLaunchOptions() {
 		if ( !settingsTab.tglbtnEnableLaunchOptions.isSelected() ) {
 			return "";
@@ -1196,6 +1445,14 @@ public class MainWindow {
 		return opts;
 	}
 	
+	/**
+	 * Adds a server found during a refresh to the database. If the server already exists, this does nothing.
+	 * 
+	 * @param cs - the {@link ChivServer} to add to the database
+	 * @see SQLiteConnection
+	 * @see SQLiteStatement
+	 * @see SQLiteException
+	 */
 	public void addServerToDatabase(ChivServer cs) {
 		SQLiteConnection db = new SQLiteConnection(new File("browserdb"));
 		try {
@@ -1241,6 +1498,11 @@ public class MainWindow {
 		db.dispose();
 	}
 	
+	/**
+	 * Updates the database of servers found during a refresh. These are used for looking up server
+	 * ip addresses and gameports from the Friends tab to find the queryport to query the server
+	 * for more information. This method uses {@link MainWindow#servers} to update the database.
+	 */
 	public void updateServerDB() {
 		if ( mw.servers != null ) {
 			new Thread() {
@@ -1256,6 +1518,13 @@ public class MainWindow {
 		}
 	}
 	
+	/**
+	 * Updates the database of servers found during a refresh. These are used for looking up server
+	 * ip addresses and gameports from the Friends tab to find the queryport to query the server
+	 * for more information.
+	 * 
+	 * @param s - the {@link Vector} of {@link ChivServer} to update into the database
+	 */
 	public void updateServerDB(final Vector<ChivServer> s) {
 		if ( s != null ) {
 			new Thread() {
@@ -1269,6 +1538,17 @@ public class MainWindow {
 		}
 	}
 	
+	/**
+	 * Searches the database for a server matching the ip address and gameport to find the
+	 * associated queryport.
+	 * 
+	 * @param ip - the ip address of the server
+	 * @param gameport - the gameport of the server
+	 * @return returns the {@link ChivServer}; or null if not found
+	 * @see SQLiteConnection
+	 * @see SQLiteStatement
+	 * @see SQLiteException
+	 */
 	public ChivServer getServerFromDB(String ip, String gameport) {
 		String queryport = "";
 		SQLiteConnection db = new SQLiteConnection(new File("browserdb"));
@@ -1306,6 +1586,12 @@ public class MainWindow {
 		return null;
 	}
 
+	/**
+	 * Deep copies a {@link Vector} of {@link ChivServer}.
+	 * 
+	 * @param s - the {@link Vector} of {@link ChivServer} to be copied
+	 * @return a deep copy of the {@link Vector} of {@link ChivServer}
+	 */
 	public Vector<ChivServer> deepCopyCSVector(Vector<ChivServer> s) {
 		Vector<ChivServer> result = new Vector<ChivServer>();
 		for (ChivServer cs : s) {
@@ -1314,6 +1600,12 @@ public class MainWindow {
 		return s;
 	}
 
+	/**
+	 * Saves all of the game settings from the Settings Tab to the config
+	 * files.
+	 * 
+	 * @see SettingsTab#writeUDKConfigSetting(String, String, String)
+	 */
 	public void saveGameConfig() {
 		settingsTab.writeUDKConfigSetting("UDKSystemSettings.ini", "AmbientOcclusion", (String)settingsTab.tblGameSettings.getValueAt(0, 1));
 		settingsTab.writeUDKConfigSetting("UDKSystemSettings.ini", "Bloom", (String)settingsTab.tblGameSettings.getValueAt(1, 1));
@@ -1325,9 +1617,12 @@ public class MainWindow {
 		settingsTab.writeUDKConfigSetting("UDKSystemSettings.ini", "UseVsync", (String)settingsTab.tblGameSettings.getValueAt(7, 1));
 	}
 	
-	//http://www.java-tips.org/java-se-tips/javax.swing/wrap-a-swing-jcomponent-in-a-background-image.html
-	// Set up contraints so that the user supplied component and the
-    // background image label overlap and resize identically
+	/**
+	 * Set up constraints so that the user supplied component and the
+     * background image label overlap and resize identically
+     * 
+     * @see "http://www.java-tips.org/java-se-tips/javax.swing/wrap-a-swing-jcomponent-in-a-background-image.html"
+	 */
     private static final GridBagConstraints gbc;
     static {
         gbc = new GridBagConstraints();
@@ -1340,12 +1635,13 @@ public class MainWindow {
     }
     
     /**
-     * Wraps a Swing JComponent in a background image. Simply invokes the overloded
+     * Wraps a Swing {@link JComponent} in a background image. Simply invokes the overloded
      * variant with Top/Leading alignment for background image.
      *
      * @param component - to wrap in the a background image
      * @param backgroundIcon - the background image (Icon)
      * @return the wrapping JPanel
+     * @see "http://www.java-tips.org/java-se-tips/javax.swing/wrap-a-swing-jcomponent-in-a-background-image.html"
      */
     public static JPanel wrapInBackgroundImage(JComponent component,
             Icon backgroundIcon) {
@@ -1357,15 +1653,16 @@ public class MainWindow {
     }
     
     /**
-     * Wraps a Swing JComponent in a background image. The vertical and horizontal
+     * Wraps a Swing {@link JComponent} in a background image. The vertical and horizontal
      * alignment of background image can be specified using the alignment
-     * contants from JLabel.
+     * constants from {@link JLabel}.
      *
      * @param component - to wrap in the a background image
      * @param backgroundIcon - the background image (Icon)
-     * @param verticalAlignment - vertical alignment. See contants in JLabel.
-     * @param horizontalAlignment - horizontal alignment. See contants in JLabel.
+     * @param verticalAlignment - vertical alignment. See constants in JLabel.
+     * @param horizontalAlignment - horizontal alignment. See constants in JLabel.
      * @return the wrapping JPanel
+     * @see "http://www.java-tips.org/java-se-tips/javax.swing/wrap-a-swing-jcomponent-in-a-background-image.html"
      */
     public static JPanel wrapInBackgroundImage(JComponent component,
             Icon backgroundIcon,

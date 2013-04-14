@@ -47,7 +47,7 @@ public class ServerListBetaTab extends JPanel implements ServerListInterface {
 		
 		((DefaultTableModel)st.dataModel).setRowCount(0);
 		
-		mw.serversB = new Vector<ChivServer>();
+		mw.serversBeta = new Vector<ChivServer>();
 		
 		refresher = new RefresherBeta(mw, this);
 		refresher.start();
@@ -268,7 +268,7 @@ public class ServerListBetaTab extends JPanel implements ServerListInterface {
 
 	@Override
 	public Vector<ChivServer> getServerList() {
-		return mw.serversB;
+		return mw.serversBeta;
 	}
 
 	@Override

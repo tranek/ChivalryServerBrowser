@@ -25,13 +25,13 @@ public class RefresherBeta extends Thread {
 			
 			msq.queryMasterServer(sl.sf, (DefaultTableModel)sl.st.dataModel);
 			
-			if ( mw.serversB != null ) {
+			if ( mw.serversBeta != null ) {
 				int count = 0;
-				for (ChivServer cs : mw.serversB){
+				for (ChivServer cs : mw.serversBeta){
 					count += Integer.parseInt(cs.mCurrentPlayers);
 				}
-				System.out.println("Retrieved " + mw.serversB.size() + " beta servers with " + count + " players playing.");
-				mw.printlnMC("Retrieved " + mw.serversB.size() + " beta servers with " + count + " players playing.");
+				System.out.println("Retrieved " + mw.serversBeta.size() + " beta servers with " + count + " players playing.");
+				mw.printlnMC("Retrieved " + mw.serversBeta.size() + " beta servers with " + count + " players playing.");
 			} else {
 				System.out.println("Retrieved 0 beta servers.");
 				mw.printlnMC("Retrieved 0 beta servers.");
@@ -46,13 +46,13 @@ public class RefresherBeta extends Thread {
 	
 	public void stopRefreshing(MainWindow mw) {
 		msq.stopRefreshing(mw);
-		if ( mw.serversB != null ) {
+		if ( mw.serversBeta != null ) {
 			int count = 0;
-			for (ChivServer cs : mw.serversB){
+			for (ChivServer cs : mw.serversBeta){
 				count += Integer.parseInt(cs.mCurrentPlayers);
 			}
-			System.out.println("Retrieved " + mw.serversB.size() + " beta servers with " + count + " players playing.");
-			mw.printlnMC("Retrieved " + mw.serversB.size() + " beta servers with " + count + " players playing.");
+			System.out.println("Retrieved " + mw.serversBeta.size() + " beta servers with " + count + " players playing.");
+			mw.printlnMC("Retrieved " + mw.serversBeta.size() + " beta servers with " + count + " players playing.");
 		} else {
 			System.out.println("Retrieved 0 servers.");
 			mw.printlnMC("Retrieved 0 servers.");
