@@ -19,16 +19,35 @@ import org.xml.sax.SAXException;
 
 import com.github.koraktor.steamcondenser.steam.community.XMLData;
 
+/**
+ * 
+ * Queries the Steam Community servers for information about the user's Steam friends.
+ *
+ */
 public class FriendQuery extends Thread {
-
-	public String url;
-	public SteamProfile steamProfile;
-	public FriendsTab ft;
-	public MainWindow mw;
-	public ExecutorService pool;
+	/** URL for the user's Steam Community page. */
+	protected String url;
+	/** Data structure for the user's Steam profile. */
+	protected SteamProfile steamProfile;
+	/** {@link FriendsTab} that spawned this FriendQuery. */
+	protected FriendsTab ft;
+	/** {@link MainWindow} reference for its utility methods. */
+	protected MainWindow mw;
+	/** Pool of threads for querying the user's friends. */
+	protected ExecutorService pool;
+	/** Synchronizing object to manage the threads' access to shared data. */
 	private Synchronizer synch;
+	/** The state of the "Show friends only in Chivalry" checkbox from {@link FriendsTab}. */
 	private final boolean inChiv;
 	
+	/**
+	 * Creates a FriendQuery with access to the {@link MainWindow}, its owning {@link FriendsTab}
+	 * and the user's Steam Community URL.
+	 * 
+	 * @param mw the MainWindow
+	 * @param ft the owning {@link FriendsTab}
+	 * @param url the user's Steam Community URL
+	 */
 	public FriendQuery(MainWindow mw, FriendsTab ft, String url) {
 		this.url = url;
 		this.steamProfile = ft.steamProfile;
@@ -37,6 +56,10 @@ public class FriendQuery extends Thread {
 		inChiv = ft.chckbxInChiv.isSelected();
 	}
 	
+	/**
+	 * Attempts to get access to the user's Steam Community profile. If it
+	 * is successful, then it attempts to get the user's Steam friends.
+	 */
 	@Override
 	public void run() {
 		mw.printlnMC("Getting Steam profile...");
@@ -47,6 +70,18 @@ public class FriendQuery extends Thread {
 		}
 	}
 	
+	/**
+	 * Gets the user's Steam Community profile.
+	 * 
+	 * @param url the URL of the user's Steam Community profile
+	 * @return whether or not it was successful in getting the user's
+	 * Steam Community profile
+	 * @see XMLData
+	 * @see SteamProfile
+	 * @see ParserConfigurationException
+	 * @see SAXException
+	 * @see IOException
+	 */
 	public boolean getProfile(String url) {
 		boolean success = false;
 		try {
@@ -69,6 +104,20 @@ public class FriendQuery extends Thread {
 		return success;
 	}
 	
+	/**
+	 * Gets the user's Steam friends from the Steam Community website.
+	 * 
+	 * @param dataModel the {@link DefaultTableModel} for the table of friends
+	 * @see SteamProfile
+	 * @see ExecutorService
+	 * @see Synchronizer
+	 * @see XMLData
+	 * @see Node
+	 * @see Element
+	 * @see Future
+	 * @see ExecutionException
+	 * @see InterruptedException
+	 */
 	public void getFriends(DefaultTableModel dataModel) {
 		steamProfile.friends = new ArrayList<SteamProfile>();
 		Set<Future<?>> set = new HashSet<Future<?>>();
@@ -114,34 +163,82 @@ public class FriendQuery extends Thread {
 		}
 	}
 	
+	/**
+	 * 
+	 * Synchronizes access to shared data between the threads that query the user's
+	 * Steam friends.
+	 *
+	 */
 	public class Synchronizer {
+		/** Data model for the friend table. */
 		private final DefaultTableModel dataModel;
+		/** List of queried Steam friends. */
 		private final ArrayList<SteamProfile> friends;
 		
+		/**
+		 * Creates a new Synchronizer for a given table data model and a list of friends.
+		 * 
+		 * @param datamodel the table data model for the Steam friends
+		 * @param friends the list of queried friends
+		 */
 		public Synchronizer(DefaultTableModel datamodel, ArrayList<SteamProfile> friends) {
 			dataModel = datamodel;
 			this.friends = friends;
 		}
 		
+		/**
+		 * Adds a row corresponding to a Steam friend to the table of Steam friends.
+		 * <p>
+		 * This method is thread safe.
+		 * 
+		 * @param rowData the row data to add to the table
+		 */
 		public synchronized void addToTable(Object[] rowData) {
 			dataModel.addRow(rowData);
 		}
 		
+		/**
+		 * Adds a Steam friend to the list of Steam friends.
+		 * <p>
+		 * This method is thread safe.
+		 * 
+		 * @param friend the Steam friend to add to the list
+		 */
 		public synchronized void addToList(SteamProfile friend) {
 			friends.add(friend);
 		}
 	}
 	
+	/**
+	 * 
+	 * The thread responsible for querying information about a Steam friend.
+	 *
+	 */
 	private class FriendWorker implements Callable<String> {
-
-		//private XMLData friend;
+		/** The Steam ID of the Steam friend. */
 		private Long friendID;
 		
+		/**
+		 * Creates a new FriendWorker with the given Steam ID.
+		 * 
+		 * @param friendID the Steam ID of the friend
+		 */
 		public FriendWorker(Long friendID) {
 			super();
 			this.friendID = friendID;
 		}
 		
+		/**
+		 * Queries the Steam friend's profile to get their status and the information
+		 * of the Chivalry server if they are currently in one.
+		 * 
+		 * @see XMLData2
+		 * @see SteamProfile
+		 * @see Synchronizer
+		 * @see IOException
+		 * @see ParserConfigurationException
+		 * @see SAXException
+		 */
 		@Override
 		public String call() {
 			String nickname = "";
@@ -161,8 +258,11 @@ public class FriendQuery extends Thread {
 	            SteamProfile friendProfile = new SteamProfile(friendURL, nickname, stateMessage);
 	            synch.addToList(friendProfile);
 	            //System.out.println(nickname + ": " + stateMessage);
+	            if ( nickname.equals("RK | Blaine") ) {
+	            	System.out.println(nickname + ": " + stateMessage);
+	            }
 	            
-	            Object[] rowData = {nickname, stateMessage, "", "", "", ""};
+	            Object[] rowData = {nickname, stateMessage, "", "", "", "", ""};
 	            if ( inChiv && checkIfInChivalry(stateMessage)) {
 	            	// Currently playing on a Chivalry server and showing only those in Chivalry
 	            	System.out.println("IN CHIV");
@@ -235,6 +335,13 @@ public class FriendQuery extends Thread {
 			return nickname;
 		}
 		
+		/**
+		 * Checks the status message of a Steam friend if he/she is currently in Chivalry.
+		 * This won't work for private Steam profiles.
+		 * 
+		 * @param status the status message of a Steam friend
+		 * @return whether or not the Steam friend is currently in Chivalry
+		 */
 		public boolean checkIfInChivalry(String status) {
 			boolean ingame = false;
 			
@@ -252,6 +359,13 @@ public class FriendQuery extends Thread {
 			return ingame;
 		}
 		
+		/**
+		 * Checks if a Steam friend is currently in any game versus just
+		 * being online or offline. This won't work for private Steam profiles.
+		 * 
+		 * @param status the status message of a Steam friend
+		 * @return whether or not the Steam friend is in a game
+		 */
 		public boolean checkIfInGame(String status) {
 			boolean ingame = false;
 			if ( status.length() < 14 ) {
@@ -263,6 +377,14 @@ public class FriendQuery extends Thread {
 			return ingame;
 		}
 		
+		/**
+		 * Gets the details of the game that a Steam friend is currently playing in.
+		 * 
+		 * @param stateMessage the state message of the Steam friend
+		 * @return the name, IP address, and gameport of the Steam friend as two strings -
+		 * one for the name and one for the IP address and gameport. The IP address and
+		 * gameport are also wrapped in HTML to make them blue and underlined.
+		 */
 		public String[] getGameDetails(String stateMessage) {
 			String[] details = new String[2];
 			String game = stateMessage.substring(13, stateMessage.indexOf("<span class")).trim();
@@ -279,6 +401,14 @@ public class FriendQuery extends Thread {
 			return details;
 		}
 		
+		/**
+		 * Gets the details of the Chivalry server that a Steam friend is currently playing in.
+		 * 
+		 * @param stateMessage the state message of the Steam friend
+		 * @return the name, IP address, and gameport of the Steam friend as two strings -
+		 * one for the name and one for the IP address and gameport. The IP address and
+		 * gameport are also wrapped in HTML to make them blue and underlined.
+		 */
 		public String[] getChivDetails(String stateMessage) {
 			String[] details = new String[2];
 			String game = stateMessage.substring(13, stateMessage.indexOf("<span class")).trim();

@@ -30,19 +30,25 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-
+/**
+ * 
+ * The tab that contains the Steam friends list.
+ *
+ */
 @SuppressWarnings("serial")
 public class FriendsTab extends JPanel {
-	public final MainWindow mw;
-	public final FriendsTab ft;
+	/** A reference to the MainWindow. */
+	protected final MainWindow mw;
+	/** A reference to itself to pass to the FriendQuery. */
+	protected final FriendsTab ft;
 	private JTable playerListTable;
-	public JTextField urlField;
-	public TableModel dataModel;
+	protected JTextField urlField;
+	protected TableModel dataModel;
 	private final String[] playerListColumnHeaders = {"Player Name", "Status", "Server Name", "IP Address:Port", "Players", "Ping", "Password"};
-	public SteamProfile steamProfile = null;
-	public JLabel lblPlayerName;
-	public JCheckBox chckbxInChiv;
-	public FriendQuery fq;
+	protected SteamProfile steamProfile = null;
+	protected JLabel lblPlayerName;
+	protected JCheckBox chckbxInChiv;
+	protected FriendQuery fq;
 	
 	public FriendsTab(MainWindow mw) {
 		super();
