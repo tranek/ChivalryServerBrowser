@@ -7,9 +7,9 @@ public class RefresherFav extends Thread {
 	private MasterServerQueryFav msq;
 	private ServerListFavTab sl;
 	
-	public RefresherFav(MainWindow mw, ServerListFavTab sl) {
+	public RefresherFav(MainWindow mw, ServerListFavTab slt) {
 		this.mw = mw;
-		this.sl = sl;
+		this.sl = slt;
 		msq = new MasterServerQueryFav(this.mw, sl.sf);
 	}
 	

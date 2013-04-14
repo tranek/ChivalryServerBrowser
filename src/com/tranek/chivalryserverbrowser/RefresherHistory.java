@@ -7,9 +7,9 @@ public class RefresherHistory extends Thread {
 	private MasterServerQueryHistory msq;
 	private ServerListHistoryTab sl;
 	
-	public RefresherHistory(MainWindow mw, ServerListHistoryTab sl) {
+	public RefresherHistory(MainWindow mw, ServerListHistoryTab slt) {
 		this.mw = mw;
-		this.sl = sl;
+		this.sl = slt;
 		msq = new MasterServerQueryHistory(this.mw, sl.sf);
 	}
 	

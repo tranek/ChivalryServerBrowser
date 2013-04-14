@@ -272,6 +272,9 @@ public class ServerListFavTab extends JPanel implements ServerList {
 
 	@Override
 	public boolean isRefreshing() {
+		if ( refresher == null ) {
+			return false;
+		}
 		return refresher.isRefreshing();
 	}
 	

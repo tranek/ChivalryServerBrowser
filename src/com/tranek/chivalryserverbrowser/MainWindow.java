@@ -602,8 +602,8 @@ public class MainWindow {
 	public void stopAllRefreshing() {
 		serverListTab.refresher.stopRefreshing(mw);
 		//serverListTab.refresher = new Refresher(mw, serverListTab);
-		if ( serverListBetaTab.refresherB != null ) {
-			serverListBetaTab.refresherB.stopRefreshing(mw);
+		if ( serverListBetaTab.refresher != null ) {
+			serverListBetaTab.refresher.stopRefreshing(mw);
 			//serverListBetaTab.refresherB = new RefresherBeta(mw, serverListBetaTab);
 		}
 		if ( serverListFavTab.refresher != null ) {
@@ -1325,6 +1325,7 @@ public class MainWindow {
 		settingsTab.writeUDKConfigSetting("UDKSystemSettings.ini", "UseVsync", (String)settingsTab.tblGameSettings.getValueAt(7, 1));
 	}
 	
+	//http://www.java-tips.org/java-se-tips/javax.swing/wrap-a-swing-jcomponent-in-a-background-image.html
 	// Set up contraints so that the user supplied component and the
     // background image label overlap and resize identically
     private static final GridBagConstraints gbc;

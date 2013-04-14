@@ -4,13 +4,13 @@ import javax.swing.table.DefaultTableModel;
 public class RefresherBeta extends Thread {
 	
 	private MainWindow mw;
-	private MasterServerQueryBeta msqB;
-	private ServerListBetaTab slb;
+	private MasterServerQueryBeta msq;
+	private ServerListBetaTab sl;
 	
-	public RefresherBeta(MainWindow mw, ServerListBetaTab slb) {
+	public RefresherBeta(MainWindow mw, ServerListBetaTab slt) {
 		this.mw = mw;
-		this.slb = slb;
-		msqB = new MasterServerQueryBeta(this.mw, slb.sfB);
+		this.sl = slt;
+		msq = new MasterServerQueryBeta(this.mw, sl.sf);
 	}
 	
 	public void run() {
@@ -23,7 +23,7 @@ public class RefresherBeta extends Thread {
 				mw.printlnMC("Refreshing beta servers...");
 			}
 			
-			msqB.queryMasterServer(slb.sfB, (DefaultTableModel)slb.st.dataModel);
+			msq.queryMasterServer(sl.sf, (DefaultTableModel)sl.st.dataModel);
 			
 			if ( mw.serversB != null ) {
 				int count = 0;
@@ -45,7 +45,7 @@ public class RefresherBeta extends Thread {
 	}
 	
 	public void stopRefreshing(MainWindow mw) {
-		msqB.stopRefreshing(mw);
+		msq.stopRefreshing(mw);
 		if ( mw.serversB != null ) {
 			int count = 0;
 			for (ChivServer cs : mw.serversB){
@@ -60,7 +60,7 @@ public class RefresherBeta extends Thread {
 	}
 	
 	public boolean isRefreshing() {
-		return !msqB.pool.isShutdown();
+		return !msq.pool.isShutdown();
 	}
 	
 }

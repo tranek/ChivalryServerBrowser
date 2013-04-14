@@ -42,6 +42,8 @@ public class FriendQuery extends Thread {
 		mw.printlnMC("Getting Steam profile...");
 		if ( getProfile(url) ) {
 			getFriends((DefaultTableModel)ft.dataModel);
+		} else {
+			mw.printlnMC("Failed to get Steam profile.");
 		}
 	}
 	
@@ -52,7 +54,7 @@ public class FriendQuery extends Thread {
 			
 			if(profile.hasElement("error")) {
 				System.out.println("Error!");
-				System.exit(1);
+				return false;
 			}
 			String nickname  = profile.getUnescapedString("steamID");
 			ft.lblPlayerName.setText(nickname);
@@ -144,10 +146,6 @@ public class FriendQuery extends Thread {
 		public String call() {
 			String nickname = "";
 			try {
-				/*Element root = friend.getRoot();
-	            Node firstchild = root.getFirstChild();
-	            friendID = Long.parseLong(firstchild.getTextContent());*/
-	            
 	            String friendURL = "http://steamcommunity.com/profiles/" + friendID;
 	            XMLData2 profile = new XMLData2(friendURL + "?xml=1");
 	            nickname  = profile.getUnescapedString("steamID");
@@ -162,14 +160,12 @@ public class FriendQuery extends Thread {
 	            }
 	            SteamProfile friendProfile = new SteamProfile(friendURL, nickname, stateMessage);
 	            synch.addToList(friendProfile);
-	            if ( nickname.equals("Lg | HeightofAbsurdity") ) {
-	            	System.out.println("THIS PLAYER IS ABSURD");
-	            }
 	            //System.out.println(nickname + ": " + stateMessage);
 	            
 	            Object[] rowData = {nickname, stateMessage, "", "", "", ""};
 	            if ( inChiv && checkIfInChivalry(stateMessage)) {
 	            	// Currently playing on a Chivalry server and showing only those in Chivalry
+	            	System.out.println("IN CHIV");
 	            	String[] details = getChivDetails(stateMessage);
 	            	rowData[1] = details[0];
 	            	rowData[3] = details[1];
@@ -190,10 +186,10 @@ public class FriendQuery extends Thread {
 	            	} else {
 	            		mw.printlnMC("Friend on Chivalry server not in database. Please refresh all servers to update database!");
 	            	}
-	            	//synch.addToTable(rowData);
+	            	synch.addToTable(rowData);
 	            } else if ( !inChiv && stateMessage.equals("") ) {
 	            	rowData[1] = "Private profile";
-	            	//synch.addToTable(rowData);
+	            	synch.addToTable(rowData);
 	            } else if ( !inChiv && checkIfInGame(stateMessage) && !stateMessage.equals("") && stateMessage.contains("<span") ) {
 	            	// Currently playing on a Chivalry server and showing all friends
 	            	String[] details = getGameDetails(stateMessage);
@@ -216,7 +212,7 @@ public class FriendQuery extends Thread {
 	            	} else {
 	            		mw.printlnMC("Friend on Chivalry server not in database. Please refresh all servers to update database!");
 	            	}
-	            	//synch.addToTable(rowData);
+	            	synch.addToTable(rowData);
 	            } else if ( !inChiv ) {
 	            	if ( ((String) rowData[1]).contains("<span") ) {
 	            		int index = ((String) rowData[1]).indexOf("<span");
@@ -225,14 +221,12 @@ public class FriendQuery extends Thread {
 	            	if ( ((String) rowData[1]).contains("<br />") ) {
 	            		rowData[1] = ((String) rowData[1]).replace("<br />", " ");
 	            	}
-	            	//synch.addToTable(rowData);
+	            	synch.addToTable(rowData);
 	            }
 	            
 	            if ( pool.isShutdown() ) {
 	            	return null;
 	            }
-	            
-	            synch.addToTable(rowData);
 	            
 			} catch ( IOException | ParserConfigurationException | SAXException e ) {
 				e.printStackTrace();

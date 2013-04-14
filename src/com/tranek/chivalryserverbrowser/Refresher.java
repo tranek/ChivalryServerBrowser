@@ -9,9 +9,9 @@ public class Refresher extends Thread {
 	private MasterServerQuery msq;
 	private ServerListTab sl;
 	
-	public Refresher(MainWindow mw, ServerListTab sl) {
+	public Refresher(MainWindow mw, ServerListTab slt) {
 		this.mw = mw;
-		this.sl = sl;
+		this.sl = slt;
 		msq = new MasterServerQuery(this.mw, sl.sf);
 	}
 	
