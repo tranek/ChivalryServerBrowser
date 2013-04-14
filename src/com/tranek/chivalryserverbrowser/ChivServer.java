@@ -10,23 +10,59 @@ import java.util.Vector;
  */
 public class ChivServer {
 
-	public String mName;
-	public String mIP;
-	public String mQueryPort;
-	public String mGamePort;
-	public String mMap;
-	public String mGameMode;
-	public String mPing;
-	public String mMaxPlayers;
-	public String mCurrentPlayers;
-	public String mHasPassword;
-	public String mMinRank;
-	public String mMaxRank;
-	public String mLocation;
-	public String mPerspective;
-	public String mLatitude;
-	public String mLongitude;
+	/** The server's name. */
+	protected String mName;
+	/** The server's IP address. */
+	protected String mIP;
+	/** The server's queryport. */
+	protected String mQueryPort;
+	/** The server's gameport. */
+	protected String mGamePort;
+	/** The server's map. */
+	protected String mMap;
+	/** The server's game mode. */
+	protected String mGameMode;
+	/** The user's ping to the server. */
+	protected String mPing;
+	/** The server's maximum players. */
+	protected String mMaxPlayers;
+	/** The server's current players. */
+	protected String mCurrentPlayers;
+	/** Whether or not the server has a password. */
+	protected String mHasPassword;
+	/** The server's minimum rank. */
+	protected String mMinRank;
+	/** The server's maximum rank. */
+	protected String mMaxRank;
+	/** The server's location. */
+	protected String mLocation;
+	/** The server's allowed player perspective. */
+	protected String mPerspective;
+	/** The server's latitude. */
+	protected String mLatitude;
+	/** The server's longitude. */
+	protected String mLongitude;
 	
+	/**
+	 * Creates a new {@link ChivServer} by directly specifying all of the member fields.
+	 * 
+	 * @param name the server's name
+	 * @param ip the server's IP address
+	 * @param queryport the server's queryport
+	 * @param gameport the server's gameport
+	 * @param map the server's map
+	 * @param gamemode the server's game mode
+	 * @param ping the user's ping to the server
+	 * @param maxplayers the server's max ping
+	 * @param currentplayers the server's current players
+	 * @param haspassword whether or not the server has a password
+	 * @param minrank the server's minimum rank
+	 * @param maxrank the server's maximum rank
+	 * @param location the server's location
+	 * @param perspective the server's allowed player perspective
+	 * @param lat the server's latitude
+	 * @param lon the server's longitude
+	 */
 	public ChivServer(String name, String ip, String queryport, String gameport, String map,
 			String gamemode, String ping, String maxplayers, String currentplayers, 
 			String haspassword, String minrank, String maxrank, String location, String perspective,
@@ -49,12 +85,31 @@ public class ChivServer {
 		mLongitude = lon;
 	}
 	
+	/**
+	 * Creates a new {@link ChivServer} with only a name, ip address, and queryport.
+	 * 
+	 * @param name the server's name
+	 * @param ip the server's ip address
+	 * @param queryport the server's queryport
+	 */
 	public ChivServer(String name, String ip, String queryport) {
 		mName = name;
 		mIP = ip;
 		mQueryPort = queryport;
 	}
 	
+	/**
+	 * Static method to create a new {@link ChivServer} by querying the server directly
+	 * from its IP address and queryport.
+	 * 
+	 * @param mw reference to the MainWindow to have access to queried servers
+	 * @param ip the server's IP address
+	 * @param queryport the server's queryport
+	 * @return a new {@link ChivServer}
+	 * @see QueryServerCondenser#getInfo()
+	 * @see LocationRIPE#getLocation(String)
+	 * @see #getLocFromOtherServer(String, Vector)
+	 */
 	public static ChivServer createChivServer(MainWindow mw, String ip, int queryport) {
 		QueryServerCondenser qsc = new QueryServerCondenser(ip, queryport);
 		HashMap<String, String> info = qsc.getInfo();
@@ -142,12 +197,18 @@ public class ChivServer {
 			lat = "" + latd;
 			lon = "" + lond;
 		}
+		
+		String gamemode = getGameMode(info.get("map"));
+		
 		return new ChivServer(info.get("name"), ip, "" + queryport, info.get("gameport"),
-				info.get("map"), info.get("gamemode"), info.get("ping"), info.get("maxplayers"),
+				info.get("map"), gamemode, info.get("ping"), info.get("maxplayers"),
 				info.get("currentplayers"), info.get("haspassword"), info.get("minrank"),
 				info.get("maxrank"), location, info.get("perspective"), lat, lon);
 	}
 	
+	/**
+	 * Creates a new clone of this {@link ChivServer}.
+	 */
 	@Override
 	public ChivServer clone() {
 		return new ChivServer(mName, mIP, mQueryPort, mGamePort, mMap, mGameMode, mPing,
@@ -155,11 +216,20 @@ public class ChivServer {
 				mPerspective, mLatitude, mLongitude);
 	}
 	
+	/**
+	 * Checks if another server with the same location has values for latitude and longitude.
+	 * If another such server exists, it copies those values from it for itself. This is
+	 * needed because the RIPE geolocation service sometimes doesn't return a latitude and
+	 *  longitude for some addresses.
+	 * 
+	 * @param location the {@link ChivServer} location
+	 * @param servers the list of {@link ChivServer} to check
+	 * @return a {@link HashMap} of the latitude and longitude; or null if no other server
+	 * with the same location exists with latitude and longitude data
+	 */
 	public synchronized static HashMap<String, String> getLocFromOtherServer(String location, Vector<ChivServer> servers) {
 		for ( ChivServer c : servers ) {
 			if ( !c.mLatitude.equals("") && !c.mLongitude.equals("") && c.mLocation.equals(location)) {
-				//cs.mLatitude = c.mLatitude;
-				//cs.mLongitude = c.mLongitude;
 				HashMap<String, String> result = new HashMap<String, String>();
 				result.put("latitude", c.mLatitude);
 				result.put("longitude", c.mLongitude);
@@ -167,6 +237,27 @@ public class ChivServer {
 			}
 		}
 		return null;
+	}
+	
+	public static String getGameMode(String mapname) {
+		String gamemode = "";
+		String prefix = mapname.split("-")[0];
+		if ( prefix.equals("aocffa") ) {
+			gamemode = "FFA";
+		} else if( prefix.equals("aocduel") ) {
+			gamemode = "DUEL";
+		} else if( prefix.equals("aockoth") ) {
+			gamemode = "KOTH";
+		} else if( prefix.equals("aocctf") ) {
+			gamemode = "CTF";
+		} else if( prefix.equals("aoclts") ) {
+			gamemode = "LTS";
+		} else if ( prefix.equals("aocto") ) {
+			gamemode = "TO";
+		} else if ( prefix.equals("aoctd") ) {
+			gamemode = "TDM";
+		}
+		return gamemode;
 	}
 	
 }

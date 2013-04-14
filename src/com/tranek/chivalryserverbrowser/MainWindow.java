@@ -65,31 +65,57 @@ public class MainWindow {
 
 	/** The JFrame for the application. */
 	protected JFrame frmChivalryServers;
+	/** A flag for the first startup of the application. */
 	private boolean firstTimeShown = true;
+	/** The message center at the bottom of the application to display messages to the user. */
 	protected JTextArea messageCenter;
+	/** The currently queried list of normal servers. */
 	protected Vector<ChivServer> servers = new Vector<ChivServer>();
+	/** The currently queried list of beta servers. */
 	protected Vector<ChivServer> serversBeta = new Vector<ChivServer>();
+	/** The currently queried list of favorite servers. */
 	protected Vector<ChivServer> serversFav = new Vector<ChivServer>();
+	/** The currently queried list of server history. */
 	protected Vector<ChivServer> serversHist = new Vector<ChivServer>();
+	/** The currently queried list of servers that the users friends are on. */
 	protected Vector<ChivServer> serversFriends;
+	/** The {@link ChivServer} currently shown as a white marker on the map. */
 	protected ChivServer mapShownServer;
+	/** A reference to the MainWindow object to pass to other objects. */
 	private MainWindow mw;
+	/** The JScrollPane for the message center. */
 	private JScrollPane messageScrollPane;
+	/** The JTabbedPane that holds all of the tabs. */
 	protected JTabbedPane tabbedPane;
+	/** Tab for normal server list. */
 	protected ServerListTab serverListTab;
+	/** Tab for beta server list. */
 	protected ServerListBetaTab serverListBetaTab;
+	/** Tab for favorite server list. */
 	protected ServerListFavTab serverListFavTab;
+	/** Tab for server history list. */
 	protected ServerListHistoryTab serverListHistoryTab;
+	/** Tab for friends list. */
 	protected FriendsTab friendsTab;
+	/** Tab for map. */
 	protected JPanel mapTab;
+	/** Tab for gamepad keybinds. */
 	protected JPanel gamepadKeybindTab;
+	/** Tab for settings. */
 	protected SettingsTab settingsTab;
+	/** The JFXPanel that hosts the embedded web browser for the map. */
 	protected JFXPanel browserFxPanel;
+	/** WebEngine for the map. */
 	protected WebEngine webEngine;
+	/** JCheckBox for whether or not to display normal server makers on the map. */
 	protected JCheckBox chckbxNormalServers;
+	/** JCheckBox for whether or not to display beta server makers on the map. */
 	protected JCheckBox chckbxBetaServers;
+	/** JCheckBox for whether or not to display favorite server makers on the map. */
 	protected JCheckBox chckbxFavoriteServers;
+	/** JCheckBox for whether or not to display server history makers on the map. */
 	protected JCheckBox chckbxServerHistory;
+	/** JToggleButton for the player heatmap on the map. */
 	private JToggleButton tglbtnTogglePlayerHeat;
 
 	/**
@@ -352,7 +378,7 @@ public class MainWindow {
 	 * Prints a single line of text to the {@link MainWindow#messageCenter}
 	 * without adding a new line before it.
 	 * 
-	 * @param msg - the String to be printed
+	 * @param msg the String to be printed
 	 * @see #checkMCBuffer()
 	 */
 	public void printMC(String msg) {
@@ -364,7 +390,7 @@ public class MainWindow {
 	 * Prints a single line of text to the {@link MainWindow#messageCenter}
 	 * with adding a new line before it.
 	 * 
-	 * @param msg - the String to be printed
+	 * @param msg the String to be printed
 	 * @see #checkMCBuffer()
 	 */
 	public void printlnMC(String msg) {
@@ -404,9 +430,9 @@ public class MainWindow {
 	/**
 	 * Returns the {@link ChivServer} for the given ip address, gameport, and ServerListInterface.
 	 * 
-	 * @param ip - the ip address of the {@link ChivServer}
-	 * @param gameport - the gameport of the {@link ChivServer}
-	 * @param sl - the {@link ServerListInterface} that requested the lookup
+	 * @param ip the ip address of the {@link ChivServer}
+	 * @param gameport the gameport of the {@link ChivServer}
+	 * @param sl the {@link ServerListInterface} that requested the lookup
 	 * @return	the {@link ChivServer} if found, null otherwise
 	 * @see #findChivServer(String, String, Vector)
 	 */
@@ -428,9 +454,9 @@ public class MainWindow {
 	/**
 	 * Returns the {@link ChivServer} for the given ip address, gameport, and list of servers.
 	 * 
-	 * @param ip - the ip address of the {@link ChivServer}
-	 * @param gameport - the gameport of the {@link ChivServer}
-	 * @param servers - the {@link Vector} of {@link ChivServer} to look in
+	 * @param ip the ip address of the {@link ChivServer}
+	 * @param gameport the gameport of the {@link ChivServer}
+	 * @param servers the {@link Vector} of {@link ChivServer} to look in
 	 * @return	the {@link ChivServer} if found, null otherwise
 	 */
 	public ChivServer findChivServer(String ip, String gameport, Vector<ChivServer> servers) {
@@ -447,7 +473,7 @@ public class MainWindow {
 	/**
 	 * Adds a {@link ButtonTabComponent} to a tab to close the tab.
 	 * 
-	 * @param pane - the {@link JTabbedPane} with the tabs
+	 * @param pane the {@link JTabbedPane} with the tabs
 	 * @param i	the index of the tab to add the button component to
 	 */
 	private void initTabComponent(JTabbedPane pane, int i) {
@@ -472,9 +498,9 @@ public class MainWindow {
 	/**
 	 * Adds a new tab with details about a specific server.
 	 * 
-	 * @param ip_port - a string of the "ipaddress:gameport" of the server
-	 * @param sl - the {@link ServerListInterface} that called this method
-	 * @param switchToTab - whether or not to automatically switch to the new tab
+	 * @param ip_port a string of the "ipaddress:gameport" of the server
+	 * @param sl the {@link ServerListInterface} that called this method
+	 * @param switchToTab whether or not to automatically switch to the new tab
 	 * @see #addServerTab(ChivServer, boolean)
 	 */
 	public void addServerTab(String ip_port, ServerListInterface sl, boolean switchToTab) {
@@ -492,7 +518,7 @@ public class MainWindow {
 	/**
 	 * Adds a new tab with details about the server that is currently shown on the map (white marker).
 	 * 
-	 * @param switchToTab - whether or not to automatically switch to the new tab
+	 * @param switchToTab whether or not to automatically switch to the new tab
 	 * @see #addServerTab(ChivServer, boolean)
 	 */
 	public void addServerTabShownServer(boolean switchToTab) {
@@ -507,8 +533,8 @@ public class MainWindow {
 	 * "ipaddress:gameport" combination from the database of previously seen
 	 * servers. If the server is not found, it does nothing.
 	 * 
-	 * @param ip_port - the "ipaddress:gameport" of the server
-	 * @param switchToTab - whether or not to automatically switch to the new tab
+	 * @param ip_port the "ipaddress:gameport" of the server
+	 * @param switchToTab whether or not to automatically switch to the new tab
 	 * @see #addServerTab(ChivServer, boolean)
 	 */
 	public void addServerTab(String ip_port, boolean switchToTab) {
@@ -525,8 +551,8 @@ public class MainWindow {
 	/**
 	 * Adds a new tab with details about a specific server.
 	 * 
-	 * @param cs - the {@link ChivServer} of the new tab
-	 * @param switchToTab - whether or not to automatically switch to the new tab
+	 * @param cs the {@link ChivServer} of the new tab
+	 * @param switchToTab whether or not to automatically switch to the new tab
 	 * @see #initTabComponent(JTabbedPane, int)
 	 */
 	public void addServerTab(ChivServer cs, boolean switchToTab) {
@@ -562,8 +588,8 @@ public class MainWindow {
 	 * it includes a string parameter representing the server list tab where
 	 * this server could be found in a lookup.
 	 * 
-	 * @param ip_port - the "ipaddress:gameport" of the server
-	 * @param sl - a string denoting which server list tab that this server originally came from
+	 * @param ip_port the "ipaddress:gameport" of the server
+	 * @param sl a string denoting which server list tab that this server originally came from
 	 * @see #addServerTab(ChivServer, boolean)
 	 * @see #addServerTabShownServer(boolean)
 	 */
@@ -584,7 +610,7 @@ public class MainWindow {
 	/**
 	 * Adds a {@link ChivServer} as a favorite server to the database.
 	 * 
-	 * @param cs - the {@link ChivServer} to add
+	 * @param cs the {@link ChivServer} to add
 	 * @see SQLiteConnection
 	 * @see SQLiteStatement
 	 * @see SQLiteException
@@ -649,7 +675,7 @@ public class MainWindow {
 	/**
 	 * Removes a {@link ChivServer} from the favorites database.
 	 * 
-	 * @param cs - the {@link ChivServer} to remove
+	 * @param cs the {@link ChivServer} to remove
 	 * @return if the server was successfully found and removed
 	 * @see SQLiteConnection
 	 * @see SQLiteStatement
@@ -742,7 +768,7 @@ public class MainWindow {
 	 * Adds a {@link ChivServer} to the server history database. This is typically called
 	 * when the user joins a server.
 	 * 
-	 * @param cs - the {@link ChivServer} to add
+	 * @param cs the {@link ChivServer} to add
 	 * @see SQLiteConnection
 	 * @see SQLiteStatement
 	 * @see SQLiteException
@@ -803,7 +829,7 @@ public class MainWindow {
 	/**
 	 * Removes a {@link ChivServer} from the history database.
 	 * 
-	 * @param cs - the {@link ChivServer} to remove
+	 * @param cs the {@link ChivServer} to remove
 	 * @return if the {@link ChivServer} was successfully found and removed
 	 * @see SQLiteConnection
 	 * @see SQLiteStatement
@@ -874,11 +900,11 @@ public class MainWindow {
 	/**
 	 * Launches the game and joins a specific server via the Steam URL.
 	 * 
-	 * @param urlstring - the Steam URL to launch the game and join the server
-	 * @param ip - the ip address of the server
-	 * @param port - the gameport of the server
-	 * @param serverName - the name of the server
-	 * @param sl - the {@link ServerListInterface} where this server is found for lookup
+	 * @param urlstring the Steam URL to launch the game and join the server
+	 * @param ip the ip address of the server
+	 * @param port the gameport of the server
+	 * @param serverName the name of the server
+	 * @param sl the {@link ServerListInterface} where this server is found for lookup
 	 * @see ChivServer
 	 * @see #findChivServer(String, String, ServerListInterface)
 	 * @see #joinServer(String, String, String, String, ChivServer)
@@ -891,11 +917,11 @@ public class MainWindow {
 	/**
 	 * Launches the game ad joins a specific server via the Steam URL.
 	 * 
-	 * @param urlstring - the Steam URL to launch the game and join the server
-	 * @param ip - the ip address of the server
-	 * @param port - the gameport of the server
-	 * @param serverName - the name of the server
-	 * @param cs - the {@link ChivServer} to join
+	 * @param urlstring the Steam URL to launch the game and join the server
+	 * @param ip the ip address of the server
+	 * @param port the gameport of the server
+	 * @param serverName the name of the server
+	 * @param cs the {@link ChivServer} to join
 	 * @see Desktop
 	 * @see URI
 	 * @see #addServerToHistory(ChivServer)
@@ -921,10 +947,10 @@ public class MainWindow {
 	/**
 	 * Launches the game and joins a specific server via the Steam URL that a Steam friend is playing on.
 	 * 
-	 * @param urlstring	- the Steam URL to launch the game and join the server
-	 * @param ip - the ip address of the server
-	 * @param port - the gameport of the server
-	 * @param friendName - the name of the Steam friend on the server
+	 * @param urlstring	the Steam URL to launch the game and join the server
+	 * @param ip the ip address of the server
+	 * @param port the gameport of the server
+	 * @param friendName the name of the Steam friend on the server
 	 * @see Desktop
 	 * @see URI
 	 * @see #saveGameConfig()
@@ -947,8 +973,8 @@ public class MainWindow {
 	/**
 	 * Method called by the map's javascript to join a specific server via the Steam URL.
 	 * 
-	 * @param ip - the ip of the server
-	 * @param queryport - the queryport of the server
+	 * @param ip the ip of the server
+	 * @param queryport the queryport of the server
 	 * @see ChivServer
 	 * @see #joinServer(String, String, String, String, ChivServer)
 	 */
@@ -1275,7 +1301,7 @@ public class MainWindow {
 	/**
 	 * Removes all markers from the map from servers found in the server list tab.
 	 * 
-	 * @param sl - the {@link ServerListInterface} with the markers to remove from the map
+	 * @param sl the {@link ServerListInterface} with the markers to remove from the map
 	 * @see WebEngine#executeScript(String)
 	 */
 	public void removeMarkers(final ServerListInterface sl) {
@@ -1302,8 +1328,8 @@ public class MainWindow {
 	/**
 	 * Adds a marker for a given {@link ChivServer} to the map.
 	 * 
-	 * @param sl - the {@link ServerListInterface} that the {@link ChivServer} came from
-	 * @param cs - the {@link ChivServer} to add to the map as a marker
+	 * @param sl the {@link ServerListInterface} that the {@link ChivServer} came from
+	 * @param cs the {@link ChivServer} to add to the map as a marker
 	 * @see WebEngine#executeScript(String)
 	 */
 	public void addMarker(final ServerListInterface sl, final ChivServer cs) {
@@ -1355,7 +1381,7 @@ public class MainWindow {
 	/**
 	 * Shows a specific {@link ChivServer} on the map as a white marker.
 	 * 
-	 * @param cs - the {@link ChivServer} to show
+	 * @param cs the {@link ChivServer} to show
 	 * @see WebEngine#executeScript(String)
 	 */
 	public void showInMap(final ChivServer cs) {
@@ -1448,7 +1474,7 @@ public class MainWindow {
 	/**
 	 * Adds a server found during a refresh to the database. If the server already exists, this does nothing.
 	 * 
-	 * @param cs - the {@link ChivServer} to add to the database
+	 * @param cs the {@link ChivServer} to add to the database
 	 * @see SQLiteConnection
 	 * @see SQLiteStatement
 	 * @see SQLiteException
@@ -1523,7 +1549,7 @@ public class MainWindow {
 	 * ip addresses and gameports from the Friends tab to find the queryport to query the server
 	 * for more information.
 	 * 
-	 * @param s - the {@link Vector} of {@link ChivServer} to update into the database
+	 * @param s the {@link Vector} of {@link ChivServer} to update into the database
 	 */
 	public void updateServerDB(final Vector<ChivServer> s) {
 		if ( s != null ) {
@@ -1542,8 +1568,8 @@ public class MainWindow {
 	 * Searches the database for a server matching the ip address and gameport to find the
 	 * associated queryport.
 	 * 
-	 * @param ip - the ip address of the server
-	 * @param gameport - the gameport of the server
+	 * @param ip the ip address of the server
+	 * @param gameport the gameport of the server
 	 * @return returns the {@link ChivServer}; or null if not found
 	 * @see SQLiteConnection
 	 * @see SQLiteStatement
@@ -1589,7 +1615,7 @@ public class MainWindow {
 	/**
 	 * Deep copies a {@link Vector} of {@link ChivServer}.
 	 * 
-	 * @param s - the {@link Vector} of {@link ChivServer} to be copied
+	 * @param s the {@link Vector} of {@link ChivServer} to be copied
 	 * @return a deep copy of the {@link Vector} of {@link ChivServer}
 	 */
 	public Vector<ChivServer> deepCopyCSVector(Vector<ChivServer> s) {
@@ -1638,8 +1664,8 @@ public class MainWindow {
      * Wraps a Swing {@link JComponent} in a background image. Simply invokes the overloded
      * variant with Top/Leading alignment for background image.
      *
-     * @param component - to wrap in the a background image
-     * @param backgroundIcon - the background image (Icon)
+     * @param component to wrap in the a background image
+     * @param backgroundIcon the background image (Icon)
      * @return the wrapping JPanel
      * @see "http://www.java-tips.org/java-se-tips/javax.swing/wrap-a-swing-jcomponent-in-a-background-image.html"
      */
@@ -1657,10 +1683,10 @@ public class MainWindow {
      * alignment of background image can be specified using the alignment
      * constants from {@link JLabel}.
      *
-     * @param component - to wrap in the a background image
-     * @param backgroundIcon - the background image (Icon)
-     * @param verticalAlignment - vertical alignment. See constants in JLabel.
-     * @param horizontalAlignment - horizontal alignment. See constants in JLabel.
+     * @param component to wrap in the a background image
+     * @param backgroundIcon the background image (Icon)
+     * @param verticalAlignment vertical alignment. See constants in JLabel.
+     * @param horizontalAlignment horizontal alignment. See constants in JLabel.
      * @return the wrapping JPanel
      * @see "http://www.java-tips.org/java-se-tips/javax.swing/wrap-a-swing-jcomponent-in-a-background-image.html"
      */

@@ -28,22 +28,49 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.Document;
 
-
+/**
+ * 
+ * The common server filter panel for all of the server list tabs.
+ *
+ */
 @SuppressWarnings("serial")
 public class FiltersPanel extends JPanel {
+	/** MainWindow for its utility functions. */
 	private MainWindow mw;
-	public JTextField serverNameFilter;
-	public JComboBox<String> gameModeList;
-	public JTextField maxPingFilter;
-	public JTextField minRankFilter;
-	public JTextField maxRankFilter;
-	public JCheckBox chckbxHidePasswordedServers;
-	public JCheckBox chckbxHideEmptyServers;
-	public JCheckBox chckbxHideFullServers;
-	public JCheckBox chckbxOfficialServersOnly;
-	public JComboBox<String> cBPerspective;
-	public JSpinner spNumThreads;
+	/** The server name filter. It converts everything to lowercase and matches
+	 *  with {@link String#contains(CharSequence)}. */
+	protected JTextField serverNameFilter;
+	/** Game mode filter. */
+	protected JComboBox<String> gameModeList;
+	/** Maximum ping filter. */
+	protected JTextField maxPingFilter;
+	/** Minimum rank filter. */
+	protected JTextField minRankFilter;
+	/** Maximum rank filter. */
+	protected JTextField maxRankFilter;
+	/** Hide passworded servers filter. */
+	protected JCheckBox chckbxHidePasswordedServers;
+	/** Hide empty servers filter. */
+	protected JCheckBox chckbxHideEmptyServers;
+	/** Hide full servers filter. */
+	protected JCheckBox chckbxHideFullServers;
+	/** Only show Official Servers filter. This just does some string matching based
+	 * on the naming convention used for the Official Servers.
+	 */
+	protected JCheckBox chckbxOfficialServersOnly;
+	/** Player perspective filter. */
+	protected JComboBox<String> cBPerspective;
+	/** Number of threads to query with. More threads makes the querying faster, but
+	 * too many threads can cause inflated reported latency times (ping).
+	 */
+	protected JSpinner spNumThreads;
 	
+	/**
+	 * Creates a FiltersPanel with a given {@link ServerListInterface} for access to its refreshing
+	 * control methods.
+	 * 
+	 * @param sl the {@link ServerListInterface} that this FiltersPanel belongs to
+	 */
 	public FiltersPanel(final ServerListInterface sl) {
 		this.mw = sl.getMW();
 		String[] gameModeCBModelList = {"All", "CTF", "DUEL", "FFA", "KOTH", "LTS", "TDM", "TO"};
