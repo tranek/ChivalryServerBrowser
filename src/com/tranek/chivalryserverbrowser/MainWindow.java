@@ -373,7 +373,7 @@ public class MainWindow {
 		System.exit(0);
 	}
 	
-	public ChivServer findChivServer(String ip, String gameport, ServerList sl) {
+	public ChivServer findChivServer(String ip, String gameport, ServerListInterface sl) {
 		Vector<ChivServer> s = null;
 		if ( sl == serverListTab ) {
 			s = servers;
@@ -413,7 +413,7 @@ public class MainWindow {
 		}
 	}
 	
-	public void addServerTab(String ip_port, ServerList sl, boolean switchToTab) {
+	public void addServerTab(String ip_port, ServerListInterface sl, boolean switchToTab) {
 		String stripped = ip_port;
 		stripped = stripped.split("<")[0];
 		String[] ipaddress = stripped.split(":");
@@ -732,7 +732,7 @@ public class MainWindow {
 	}
 
 	//IF map causes lag, can load a blank page on join game
-	public void joinServer(String urlstring, String ip, String port, String serverName, ServerList sl) {
+	public void joinServer(String urlstring, String ip, String port, String serverName, ServerListInterface sl) {
 		ChivServer cs = findChivServer(ip, port, sl);
 		joinServer(urlstring, ip, port, serverName, cs);
 	}
@@ -1057,7 +1057,7 @@ public class MainWindow {
 		return null;
 	}
 	
-	public void removeMarkers(final ServerList sl) {
+	public void removeMarkers(final ServerListInterface sl) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -1078,7 +1078,7 @@ public class MainWindow {
 		});
 	}
 	
-	public void addMarker(final ServerList sl, final ChivServer cs) {
+	public void addMarker(final ServerListInterface sl, final ChivServer cs) {
 		if ( !cs.mLatitude.equals("") && !cs.mLongitude.equals("") ) {
 			Platform.runLater(new Runnable() {
 				@Override

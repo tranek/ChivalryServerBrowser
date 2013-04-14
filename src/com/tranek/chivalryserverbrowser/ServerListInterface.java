@@ -2,7 +2,7 @@ package com.tranek.chivalryserverbrowser;
 import java.util.Vector;
 
 
-public interface ServerList {
+public interface ServerListInterface {
 	public void RefreshServers();
 	public MainWindow getMW();
 	public Vector<ChivServer> getServerList();

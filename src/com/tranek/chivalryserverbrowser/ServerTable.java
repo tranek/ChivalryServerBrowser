@@ -29,7 +29,7 @@ public class ServerTable extends JScrollPane {
 			"Location", "Pass", "Min Rank", "Max Rank"};
 	private MainWindow mw;
 	
-	public ServerTable(final ServerList sl) {
+	public ServerTable(final ServerListInterface sl) {
 		mw = sl.getMW();
 		dataModel = new DefaultTableModel(serverListColumnHeaders, 0) {
 			public boolean isCellEditable(int row, int column){  

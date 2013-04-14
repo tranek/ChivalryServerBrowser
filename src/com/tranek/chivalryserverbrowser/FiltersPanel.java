@@ -44,7 +44,7 @@ public class FiltersPanel extends JPanel {
 	public JComboBox<String> cBPerspective;
 	public JSpinner spNumThreads;
 	
-	public FiltersPanel(final ServerList sl) {
+	public FiltersPanel(final ServerListInterface sl) {
 		this.mw = sl.getMW();
 		String[] gameModeCBModelList = {"All", "CTF", "DUEL", "FFA", "KOTH", "LTS", "TDM", "TO"};
 		ComboBoxModel<String> gameModeCBModel = new DefaultComboBoxModel<String>(gameModeCBModelList);

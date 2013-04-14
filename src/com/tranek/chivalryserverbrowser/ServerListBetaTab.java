@@ -12,7 +12,7 @@ import com.almworks.sqlite4java.SQLiteStatement;
 
 // B at the end of variable names denotes Beta
 @SuppressWarnings("serial")
-public class ServerListBetaTab extends JPanel implements ServerList {
+public class ServerListBetaTab extends JPanel implements ServerListInterface {
 	private final MainWindow mw;
 	public ServerFilters sf = new ServerFilters();
 	public RefresherBeta refresher;

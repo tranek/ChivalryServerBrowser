@@ -11,7 +11,7 @@ import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteStatement;
 
 @SuppressWarnings("serial")
-public class ServerListHistoryTab extends JPanel implements ServerList {
+public class ServerListHistoryTab extends JPanel implements ServerListInterface {
 	private final MainWindow mw;
 	public ServerFilters sf = new ServerFilters();
 	public RefresherHistory refresher;
