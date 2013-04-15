@@ -39,17 +39,30 @@ import javax.swing.table.TableRowSorter;
 public class FriendsTab extends JPanel {
 	/** A reference to the MainWindow. */
 	protected final MainWindow mw;
-	/** A reference to itself to pass to the FriendQuery. */
+	/** A reference to itself to pass to the {@link FriendQuery}. */
 	protected final FriendsTab ft;
+	/** The JTable containing the user's Steam friends. */
 	private JTable playerListTable;
+	/** The URL to the user's Steam Community page. */
 	protected JTextField urlField;
+	/** Data model for the Steam friend table. */
 	protected TableModel dataModel;
+	/** Column headers for the Steam friend table. */
 	private final String[] playerListColumnHeaders = {"Player Name", "Status", "Server Name", "IP Address:Port", "Players", "Ping", "Password"};
+	/** The user's {@link SteamProfile}. */
 	protected SteamProfile steamProfile = null;
+	/** Label for the user's Steam nickname. */
 	protected JLabel lblPlayerName;
+	/** Whether or not the user only wants to show Steam friends currently in Chivalry: Medieval Warfare. */
 	protected JCheckBox chckbxInChiv;
+	/** The FriendQuery that parses and queries all of the user's Steam friends from his/her Steam Community profile page. */
 	protected FriendQuery fq;
 	
+	/**
+	 * Creates a new FriendsTab.
+	 * 
+	 * @param mw the MainWindow with utility methods
+	 */
 	public FriendsTab(MainWindow mw) {
 		super();
 		this.mw = mw;
@@ -57,6 +70,9 @@ public class FriendsTab extends JPanel {
 		initialize();
 	}
 	
+	/**
+	 * Initializes the JPanel and adds all children components to it.
+	 */
 	public void initialize() {
 		setLayout(new BorderLayout(0, 0));
 		
@@ -123,15 +139,7 @@ public class FriendsTab extends JPanel {
 		
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if ( fq != null && !fq.pool.isShutdown() ) {
-					fq.pool.shutdownNow();
-				}
-				mw.serversFriends = new Vector<ChivServer>();
-				String url = urlField.getText();
-				((DefaultTableModel)dataModel).setRowCount(0);
-				fq = new FriendQuery(mw, ft, url);
-				fq.start();
-				mw.settingsTab.tfSteamCommunityUrl.setText(url);
+				refreshFriends();
 			}
 		});
 		
@@ -266,6 +274,24 @@ public class FriendsTab extends JPanel {
 		playerListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		playerListScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		add(playerListScrollPane, BorderLayout.CENTER);
+	}
+	
+	/**
+	 * Refreshes the user's list of Steam friends. This is called whenever the
+	 * refresh button is clicked. This needs to be called after the JCheckBox
+	 * for displaying only friends in Chivalry versus all friends is checked or
+	 * unchecked to refresh the list of Steam friends.
+	 */
+	public void refreshFriends() {
+		if ( fq != null && !fq.pool.isShutdown() ) {
+			fq.pool.shutdownNow();
+		}
+		mw.serversFriends = new Vector<ChivServer>();
+		String url = urlField.getText();
+		((DefaultTableModel)dataModel).setRowCount(0);
+		fq = new FriendQuery(mw, ft, url);
+		fq.start();
+		mw.settingsTab.tfSteamCommunityUrl.setText(url);
 	}
 	
 }
