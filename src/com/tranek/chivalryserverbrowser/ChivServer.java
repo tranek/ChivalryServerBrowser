@@ -288,6 +288,7 @@ public class ChivServer {
 	public static String getGameMode(String mapname) {
 		String gamemode = "";
 		String prefix = mapname.split("-")[0];
+		 prefix = prefix.toLowerCase();
 		if ( prefix.equals("aocffa") ) {
 			gamemode = "FFA";
 		} else if( prefix.equals("aocduel") ) {
