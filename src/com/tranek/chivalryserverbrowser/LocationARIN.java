@@ -1,20 +1,38 @@
 package com.tranek.chivalryserverbrowser;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LocationARIN {
-
+/**
+ * 
+ * Gets the location information of a server via its IP address from the
+ * ARIN WHOIS services.
+ *
+ */
+public class LocationARIN extends Location {
+	
+	/**
+	 * Creates a new LocationARIN.
+	 */
 	public LocationARIN() {}
 	
+	/**
+	 * Gets the location (city, state, and country) of a server via its IP
+	 * address from the ARIN WHOIS services. This only works with servers
+	 * serviced by ARIN (North America). If it detects a server is 
+	 * serviced by RIPE, it tries to create a {@link LocationRIPE} to query
+	 * its information. This needs to be removed as all of the logic
+	 * for location in the application tries RIPE first.
+	 * 
+	 * @param ip the IP address of the server
+	 * @return a HashMap of the city, state, and country for the server;
+	 * or null if unsuccessful in getting its location
+	 * @see JSONObject
+	 * @see JSONException
+	 * @see LocationRIPE
+	 */
 	public HashMap<String, String> getLocation(String ip) {
 		HashMap<String, String> location = new HashMap<String, String>();
 		try {
@@ -66,24 +84,4 @@ public class LocationARIN {
 		return null;
 	}
 	
-	public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-		InputStream is = new URL(url).openStream();
-		try {
-			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-			String jsonText = readAll(rd);
-			JSONObject json = new JSONObject(jsonText);
-			return json;
-		} finally {
-			is.close();
-		}
-	}
-	
-	private static String readAll(Reader rd) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		int cp;
-		while ((cp = rd.read()) != -1) {
-			sb.append((char) cp);
-		}
-		return sb.toString();
-	}
 }

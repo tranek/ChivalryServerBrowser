@@ -1,21 +1,32 @@
 package com.tranek.chivalryserverbrowser;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LocationRIPE {
+/**
+ * 
+ * Gets the location information of a server via its IP address from the
+ * RIPE WHOIS services.
+ *
+ */
+public class LocationRIPE extends Location {
 
+	/**
+	 * Creates a new LocationRIPE.
+	 */
 	public LocationRIPE() {}
 	
+	/**
+	 * Gets the location (city, state, country, latitude, and longitude)
+	 * of a server via its IP address from the RIPE WHOIS services.
+	 * This works with almost every server.
+	 * 
+	 * @param ip the IP address of the server
+	 * @return a HashMap of the city, state, country, latitude, and longitude
+	 */
 	public HashMap<String, String> getLocation(String ip) {
 		HashMap<String, String> location = new HashMap<String, String>();
 		String city = "";
@@ -24,28 +35,6 @@ public class LocationRIPE {
 		String latitude = "";
 		String longitude = "";
 		try {
-			/*JSONObject json = readJsonFromUrl("http://apps.db.ripe.net/whois/search.json?query-string=" +
-					ip + "&source=ripe");
-			JSONObject resources = json.getJSONObject("whois-resources");
-			JSONObject objects = resources.getJSONObject("objects");
-			JSONArray object = objects.getJSONArray("object");
-			JSONObject o0 = object.getJSONObject(0);
-			JSONObject attributes0 = o0.getJSONObject("attributes");
-			JSONArray attribute0 = attributes0.getJSONArray("attribute");
-			JSONObject cntry = attribute0.getJSONObject(3);
-			country = cntry.getString("value");
-			
-			JSONObject o1 = object.getJSONObject(1);
-			JSONObject attributes1 = o1.getJSONObject("attributes");
-			JSONArray attribute1 = attributes1.getJSONArray("attribute");
-			JSONObject cty = attribute1.getJSONObject(4);
-			city = cty.getString("value");
-			
-			JSONObject ste = attribute1.getJSONObject(6);
-			state = ste.getString("value");
-			if ( state.contains(",") ) {
-				state = state.split(",")[0];
-			}*/
 			JSONObject json = readJsonFromUrl("http://stat.ripe.net/data/geoloc/data.json?resource=" + ip);
 			JSONObject data = json.getJSONObject("data");
 			JSONArray locations = data.getJSONArray("locations");
@@ -94,27 +83,6 @@ public class LocationRIPE {
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-		InputStream is = new URL(url).openStream();
-		try {
-			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-			String jsonText = readAll(rd);
-			JSONObject json = new JSONObject(jsonText);
-			return json;
-		} finally {
-			is.close();
-		}
-	}
-	
-	private static String readAll(Reader rd) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		int cp;
-		while ((cp = rd.read()) != -1) {
-			sb.append((char) cp);
-		}
-		return sb.toString();
 	}
 	
 }
