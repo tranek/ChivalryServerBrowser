@@ -19,14 +19,29 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-
+/**
+ * 
+ * The dialog for editing the gamepad's look sensitivity which is bound to the
+ * right thumbstick. There are two different values - one for looking left to
+ * right and one for up and down with default values of 1.0 and 0.65 respectively.
+ *
+ */
 @SuppressWarnings("serial")
 public class GamepadSensitivityDialog extends JDialog {
-
+	/** A reference to the MainWindow for its utility methods. */
 	private final MainWindow mw;
+	/** The JSpinner to change the value for the left to right sensitivity. */
 	private JSpinner spLRSensitivity;
+	/** The JSpinner to change the value for the up and down sensitivity. */
 	private JSpinner spUDSensitivity;
 	
+	/**
+	 * Creates a new GamepadSensitivityDialog.
+	 * 
+	 * @param MW the MainWindow used for its utility methods
+	 * @param frame the Frame to attach this dialog to
+	 * @see JSpinner
+	 */
 	public GamepadSensitivityDialog(MainWindow MW, Frame frame) {
 		super(frame, "Gamepad Sensitivity", true);
 		mw = MW;
@@ -98,20 +113,46 @@ public class GamepadSensitivityDialog extends JDialog {
 		setLocationRelativeTo(frame);
 	}
 	
+	/** 
+	 * Sets this dialog's visibility to true.
+	 * 
+	 * @see #setVisible(boolean)
+	 */
 	public void showDialog() {
 		setVisible(true);
 	}
 	
+	/**
+	 * Cancels any changes made in the dialog. Does not write anything
+	 * to disk.
+	 */
 	public void cancel() {
 		setDefaults();
 		setVisible(false);
 	}
 	
+	/**
+	 * Sets the sensitivity fields to their default values.
+	 */
 	public void setDefaults() {
 		spLRSensitivity.setValue(1.0);
 		spUDSensitivity.setValue(0.65);
 	}
 	
+	/**
+	 * Gets the sensitivity values from the configuration file. It looks for the configuration
+	 * file in the user's "Documents\My Games\Chivalry Medieval Warefare\UDKGame\Config"
+	 * directory.
+	 * 
+	 * @param file the configuration file where the bindings are located
+	 * @param button the gamepad button to get the bindings for
+	 * @return the commands bound to the button separated by " | "
+	 * @see Keybinds
+	 * @see JFileChooser#getFileSystemView()
+	 * @see FileSystemView#getDefaultDirectory()
+	 * @see BufferedReader
+	 * @see FileReader
+	 */
 	public String getBinding(String file, String button) {
 		JFileChooser fr = new JFileChooser();
 		FileSystemView fw = fr.getFileSystemView();		
@@ -165,6 +206,15 @@ public class GamepadSensitivityDialog extends JDialog {
 		return null;
 	}
 	
+	/**
+	 * Gets the speed value for a look command.
+	 * 
+	 * @param file the configuration file where the bindings are located
+	 * @param button the look command name
+	 * @return the speed value for this look command
+	 * @see #getBinding(String, String)
+	 * @see Keybinds
+	 */
 	public double getSpeed(String file, String button) {
 		String commands = getBinding(file, button);
 		int startIndex = commands.indexOf("Speed=") + 6;
@@ -175,6 +225,16 @@ public class GamepadSensitivityDialog extends JDialog {
 		return -1;
 	}
 	
+	/**
+	 * Writes the new speed values back to the configuration file.
+	 * 
+	 * @param file the configuration file where the bindings are located
+	 * @param button the look command name
+	 * @param speed the speed value to write to the configuration file
+	 * @return true if it successfully wrote to the configuration file; false otherwise
+	 * @see #writeBinding(String, String, String)
+	 * @see Keybinds
+	 */
 	public boolean writeSpeed(String file, String button, String speed) {
 		String com = getBinding(file, button);
 		String commands = "";
@@ -195,6 +255,21 @@ public class GamepadSensitivityDialog extends JDialog {
 		return writeBinding(file, button, commands);
 	}
 	
+	/**
+	 * Writes a new binding for a button to the configuration file.
+	 * 
+	 * @param file the configuration file where the bindings are located
+	 * @param button the gamepad button to write the bindings for
+	 * @param commands the commands to write for the gamepad button
+	 * @return true if successfully written to the config file; false otherwise
+	 * @see Keybinds
+	 * @see JFileChooser#getFileSystemView()
+	 * @see FileSystemView#getDefaultDirectory()
+	 * @see BufferedReader
+	 * @see FileReader
+	 * @see FileWriter
+	 * @see BufferedWriter
+	 */
 	public boolean writeBinding(String file, String button, String commands) {
 		
 		JFileChooser fr = new JFileChooser();

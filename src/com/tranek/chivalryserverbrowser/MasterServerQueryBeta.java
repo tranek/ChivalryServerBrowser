@@ -209,7 +209,7 @@ public class MasterServerQueryBeta {
 					lon = loc.get("longitude");
 				}
 				if ( location.equals("") ) {
-					Location l2 = new Location();
+					LocationARIN l2 = new LocationARIN();
 					loc = l2.getLocation(server.getIP());
 					String city = loc.get("city");
 					String state = loc.get("state");

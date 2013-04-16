@@ -25,17 +25,49 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 
-
+/**
+ * 
+ * The dialog that pops up for editing the gamepad button binds. It presents the
+ * user with a table of the current commands bound to a button with the option of
+ * changing the order of the commands, editing the commands, adding a new command,
+ * and removing a command.
+ *
+ */
 @SuppressWarnings("serial")
 public class GamepadKeybindDialog extends JDialog {
-	
+	/** 
+	 * The name of the button.
+	 * 
+	 * @see Keybinds
+	 */
 	private final String mButton;
+	/** 
+	 * The list of all of the currently bound commands to a button.
+	 * 
+	 * @see Keybinds
+	 */
 	private JTable tblCommands;
+	/** The data model for the list of currently bound commands to a button. */
 	private TableModel dataModel;
+	/** The column headers for the list of currently bound commands to a button. */
 	private final String[] actionTableHeaders = {"Actions"};
+	/**
+	 * The JComboBox that is created when a new command is added to the table. This
+	 * allows the user to select a command from {@link Keybinds#commands}.
+	 */
 	private JComboBox<String> cbCommands;
+	/** A reference to the MainWindow for its utility methods. */
 	private final MainWindow mw;
 
+	/**
+	 * Creates a new GamepadKeybindDialog.
+	 * 
+	 * @param MW the MainWindow
+	 * @param frame the Frame to attach this dialog to
+	 * @param title the title of this dialog
+	 * @param button the gamepad button for this dialog
+	 * @see Keybinds
+	 */
 	public GamepadKeybindDialog(MainWindow MW, Frame frame, String title, final String button) {
 		super(frame, title, true);
 		setMinimumSize(new Dimension(450, 315));
@@ -148,9 +180,16 @@ public class GamepadKeybindDialog extends JDialog {
 			}
 		}
 		
-		getBinding("UDKGame.ini", mButton);
+		getBindingAndAddToTable("UDKGame.ini", mButton);
 	}
 	
+	/**
+	 * Adds a new command to the {@link JTable} of commands. It creates a new {@link JComboBox}, adds it to the
+	 * table, and then opens the drop down list automatically for the user with the description of all of the
+	 * commands.
+	 * 
+	 * @see Keybinds#commandDescriptions
+	 */
 	public void addCommand() {
 		Object[] rowData = new Object[1];
 		rowData[0] = Keybinds.commands.get(0);
@@ -166,6 +205,9 @@ public class GamepadKeybindDialog extends JDialog {
 		jcb.setPopupVisible(true);
 	}
 	
+	/**
+	 * Removes the selected command from the {@link JTable}.
+	 */
 	public void removeCommand() {
 		if ( tblCommands.getSelectedRow() > -1 ) {
 			final int tableRow = tblCommands.getSelectedRow();
@@ -180,6 +222,19 @@ public class GamepadKeybindDialog extends JDialog {
 		}
 	}
 	
+	/**
+	 * Moves the selected command up in the {@link JTable} assuming that it is not the
+	 * first row. The {@link JComboBox} for this row can sometimes get messed up if the
+	 * user selects a row (causing the drop down menu to open) and clicks outside of the
+	 * {@link JTable} to close the drop down. It can be seen by the text being partially
+	 * hidden. The workaround for this is to get a reference to the {@link JComboBox} and
+	 * then set its selected index to its current index.
+	 * 
+	 * @see JTable#getCellEditor(int, int)
+	 * @see TableCellEditor#getTableCellEditorComponent(JTable, Object, boolean, int, int)
+	 * @see JComboBox#setSelectedIndex(int)
+	 * @see JComboBox#getSelectedIndex()
+	 */
 	public void moveCommandUp() {
 		final int tableRow = tblCommands.getSelectedRow();
 		final int row = tblCommands.convertRowIndexToModel(tableRow);
@@ -198,6 +253,19 @@ public class GamepadKeybindDialog extends JDialog {
 		}
 	}
 	
+	/**
+	 * Moves the selected command down in the {@link JTable} assuming that it is not the
+	 * last row. The {@link JComboBox} for this row can sometimes get messed up if the
+	 * user selects a row (causing the drop down menu to open) and clicks outside of the
+	 * {@link JTable} to close the drop down. It can be seen by the text being partially
+	 * hidden. The workaround for this is to get a reference to the {@link JComboBox} and
+	 * then set its selected index to its current index.
+	 * 
+	 * @see JTable#getCellEditor(int, int)
+	 * @see TableCellEditor#getTableCellEditorComponent(JTable, Object, boolean, int, int)
+	 * @see JComboBox#setSelectedIndex(int)
+	 * @see JComboBox#getSelectedIndex()
+	 */
 	public void moveCommandDown() {
 		final int tableRow = tblCommands.getSelectedRow();
 		final int row = tblCommands.convertRowIndexToModel(tableRow);
@@ -216,11 +284,29 @@ public class GamepadKeybindDialog extends JDialog {
 		}
 	}
 	
+	/** 
+	 * Sets this dialog's visibility to true.
+	 * 
+	 * @see #setVisible(boolean)
+	 */
 	public void showDialog() {
 		setVisible(true);
 	}
 	
-	public void getBinding(String file, String button) {
+	/**
+	 * Gets the commands bound to a particular gamepad button and adds them to the JTable.
+	 * It looks for the configuration file in the user's "Documents\My Games\Chivalry Medieval Warefare\UDKGame\Config"
+	 * directory.
+	 * 
+	 * @param file the configuration file where the bindings are located
+	 * @param button the gamepad button to get the bindings for
+	 * @see Keybinds
+	 * @see JFileChooser#getFileSystemView()
+	 * @see FileSystemView#getDefaultDirectory()
+	 * @see BufferedReader
+	 * @see FileReader
+	 */
+	public void getBindingAndAddToTable(String file, String button) {
 		JFileChooser fr = new JFileChooser();
 		FileSystemView fw = fr.getFileSystemView();		
 		String configDirectory = fw.getDefaultDirectory() + "\\My Games\\Chivalry Medieval Warfare\\UDKGame\\Config\\";
@@ -278,6 +364,20 @@ public class GamepadKeybindDialog extends JDialog {
 		}
 	}
 	
+	/**
+	 * Gets the commands bound to a particular gamepad button. It looks for the configuration
+	 * file in the user's "Documents\My Games\Chivalry Medieval Warefare\UDKGame\Config"
+	 * directory.
+	 * 
+	 * @param file the configuration file where the bindings are located
+	 * @param button the gamepad button to get the bindings for
+	 * @return the commands separated by " | "
+	 * @see Keybinds
+	 * @see JFileChooser#getFileSystemView()
+	 * @see FileSystemView#getDefaultDirectory()
+	 * @see BufferedReader
+	 * @see FileReader
+	 */
 	public String getCommands(String file, String button) {
 		JFileChooser fr = new JFileChooser();
 		FileSystemView fw = fr.getFileSystemView();		
@@ -331,6 +431,21 @@ public class GamepadKeybindDialog extends JDialog {
 		return null;
 	}
 	
+	/**
+	 * Writes a new binding for a button to the configuration file.
+	 * 
+	 * @param file the configuration file where the bindings are located
+	 * @param button the gamepad button to write the bindings for
+	 * @param commands the commands to write for the gamepad button
+	 * @return true if successfully written to the config file; false otherwise
+	 * @see Keybinds
+	 * @see JFileChooser#getFileSystemView()
+	 * @see FileSystemView#getDefaultDirectory()
+	 * @see BufferedReader
+	 * @see FileReader
+	 * @see FileWriter
+	 * @see BufferedWriter
+	 */
 	public boolean writeBinding(String file, String button, String commands) {
 		
 		JFileChooser fr = new JFileChooser();

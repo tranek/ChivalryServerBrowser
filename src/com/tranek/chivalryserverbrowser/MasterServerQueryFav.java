@@ -227,7 +227,7 @@ public class MasterServerQueryFav {
 					lon = loc.get("longitude");
 				}
 				if ( location.equals("") ) {
-					Location l2 = new Location();
+					LocationARIN l2 = new LocationARIN();
 					loc = l2.getLocation(sip);
 					String city = loc.get("city");
 					String state = loc.get("state");

@@ -20,15 +20,29 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-
+/**
+ * 
+ * The {@link JTable} wrapped in a {@link JScrollPane} that displays the servers queried
+ * on each server list tab.
+ *
+ */
 @SuppressWarnings("serial")
 public class ServerTable extends JScrollPane {
+	/** The JTable that contains all of the queried servers. */
 	private JTable serverListTable;
-	public TableModel dataModel;
+	/** The data model for the server list table. */
+	protected TableModel dataModel;
+	/** The column headers for the server list table. */
 	private final String[] serverListColumnHeaders = {"Server Name", "IP Address:Port", "Type", "Map", "Players", "Ping",
 			"Location", "Pass", "Min Rank", "Max Rank"};
+	/** A reference to the MainWindow. */
 	private MainWindow mw;
 	
+	/**
+	 * Creates a new ServerTable.
+	 * 
+	 * @param sl the ServerListInterface that this ServerTable belongs to
+	 */
 	public ServerTable(final ServerListInterface sl) {
 		mw = sl.getMW();
 		dataModel = new DefaultTableModel(serverListColumnHeaders, 0) {

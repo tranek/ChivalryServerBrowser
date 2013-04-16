@@ -1,7 +1,18 @@
 package com.tranek.chivalryserverbrowser;
 import java.util.Comparator;
 
+/**
+ * 
+ * Comparator used in the server list tables for sorting the Players
+ * column. It sorts the current players as integers instead of the
+ * default Strings.
+ *
+ */
 public class PlayerComparator implements Comparator<String> {
+	/**
+	 * Parses out the first integer (current players) and compares
+	 * them as integers would be compared normally.
+	 */
 	@Override
 	public int compare(String o1, String o2) {
 		if ( o1.equals("") && !o2.equals("") ) {

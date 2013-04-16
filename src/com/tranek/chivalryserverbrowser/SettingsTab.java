@@ -27,21 +27,42 @@ import javax.swing.table.TableModel;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.Document;
 
-
+/**
+ * 
+ * The settings tab where the user can change settings of the application
+ * and video settings of Chivalry Medieval Warfare.
+ *
+ */
 @SuppressWarnings("serial")
 public class SettingsTab extends JPanel {
-
-	public MainWindow mw;
-	public JPanel pnlSteamCommunity;
-	public JTextField tfSteamCommunityUrl;
-	public JTextField tfLaunchResX;
-	public JTextField tfLaunchResY;
-	public JTable tblGameSettings;
+	/** A reference to the MainWindow for its utility methods. */
+	protected MainWindow mw;
+	/** The JPanel for settings relating to the Steam Community. */
+	protected JPanel pnlSteamCommunity;
+	/** The URL to the user's Steam Community page. This is linked to the URL field on the
+	 * friends tab. Any changes to this will be reflected there and vice versa.
+	 */
+	protected JTextField tfSteamCommunityUrl;
+	/** The X resolution value launch option. */
+	protected JTextField tfLaunchResX;
+	/** The Y resolution value launch option. */
+	protected JTextField tfLaunchResY;
+	/** The JTable for the game settings. */
+	protected JTable tblGameSettings;
+	/** Column headers for the game settings table. */
 	private final String[] gameSettingsColumnHeaders = {"Setting", "Value"};
-	public TableModel gameSettingsDataModel;
-	public JComboBox<String> cbScreen;
-	public JToggleButton tglbtnEnableLaunchOptions;
+	/** The data model for the game settings table. */
+	protected TableModel gameSettingsDataModel;
+	/** The JComboBox for the possible screen types launch option. */
+	protected JComboBox<String> cbScreen;
+	/** Toggle button for enabling the launch options when joining a server. */
+	protected JToggleButton tglbtnEnableLaunchOptions;
 	
+	/**
+	 * Creates a new SettingsTab. Calls its {@link #initialize()} method.
+	 * 
+	 * @param MW the MainWindow
+	 */
 	public SettingsTab(MainWindow MW) {
 		super();
 		setLayout(null);
@@ -50,6 +71,9 @@ public class SettingsTab extends JPanel {
 		initialize();
 	}
 	
+	/**
+	 * Sets up the {@link SettingsTab} and its children components.
+	 */
 	public void initialize() {
 		JLabel lblSteamCommunity = new JLabel("Steam Community");
 		lblSteamCommunity.setBounds(12, 13, 113, 16);
@@ -214,6 +238,19 @@ public class SettingsTab extends JPanel {
 		((DefaultTableModel)gameSettingsDataModel).addRow(rowDataVsync);
 	}
 	
+	/**
+	 * Gets the value for a particular game setting. It looks for the configuration
+	 * file in the user's "Documents\My Games\Chivalry Medieval Warefare\UDKGame\Config"
+	 * directory.
+	 * 
+	 * @param file the configuration file where the settings are located
+	 * @param key the name of the setting
+	 * @return the value of the setting
+	 * @see JFileChooser#getFileSystemView()
+	 * @see FileSystemView#getDefaultDirectory()
+	 * @see BufferedReader
+	 * @see FileReader
+	 */
 	public String getUDKConfigSetting(String file, String key) {
 		JFileChooser fr = new JFileChooser();
 		FileSystemView fw = fr.getFileSystemView();		
@@ -240,6 +277,16 @@ public class SettingsTab extends JPanel {
 		return null;
 	}
 	
+	/**
+	 * Writes the value for a particular game setting to the configuration file. It 
+	 * looks for the configuration file in the user's
+	 * "Documents\My Games\Chivalry Medieval Warefare\UDKGame\Config" directory.
+	 * 
+	 * @param file the configuration file where the settings are located
+	 * @param key the name of the setting
+	 * @param value the value of the setting
+	 * @return true if it successfully wrote the setting to the configuration file; false otherwise
+	 */
 	public boolean writeUDKConfigSetting(String file, String key, String value) {
 		JFileChooser fr = new JFileChooser();
 		FileSystemView fw = fr.getFileSystemView();		
@@ -279,4 +326,5 @@ public class SettingsTab extends JPanel {
 		}
 		return false;
 	}
+
 }

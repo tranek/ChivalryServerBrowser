@@ -28,20 +28,39 @@ import javax.swing.table.TableRowSorter;
 
 import com.github.koraktor.steamcondenser.steam.SteamPlayer;
 
+/**
+ * 
+ * The tab created for an individual server to show more details about that server.
+ *
+ */
 @SuppressWarnings("serial")
 public class ServerTab extends JPanel{
+	/** The ChivServer for this tab. */
 	private final ChivServer cs;
+	/** The JTable for the list of players currently on the server. */
 	private final JTable playerListTable;
+	/** Column headers for the player list table. */
 	private final String[] playerListColumnHeaders = {"Player Name", "Score", "Time Connected"};
+	/** The data model for the player list table. */
 	private final DefaultTableModel dataModel;
+	/** Reference to the MainWindow for its utility methods. */
 	private final MainWindow mw;
+	/** The ServerQuerier for querying the server. */
 	private ServerQuerier sq;
+	/** JLabel for the server name. */
 	private final JLabel lblServerName;
+	/** JLabel for the players. */
 	private final JLabel lblPlyrs;
+	/** JLabel for the number of players. */
 	private final JLabel lblPlayers;
+	/** JLabel for the map name. */
 	private final JLabel lblMapName;
+	/** Reference to itself. */
 	private final ServerTab st;
 	
+	/** 
+	 * Creates a new ServerTab.
+	 */
 	public ServerTab(MainWindow MW, ChivServer CS) {
 		super();
 		this.cs = CS;
@@ -280,6 +299,9 @@ public class ServerTab extends JPanel{
 		refresh();
 	}
 	
+	/** 
+	 * Launches the game and connects to the server.
+	 */
 	public void joinServer() {
 		boolean hasPassword = cs.mHasPassword.equals("1");
 		String ip = cs.mIP;
@@ -297,11 +319,19 @@ public class ServerTab extends JPanel{
 		}
 	}
 
+	/**
+	 * Refreshes the information about the server.
+	 */
 	public void refresh() {
 		sq = new ServerQuerier();
 		sq.start();
 	}
 	
+	/**
+	 * 
+	 * Queries the server for its information.
+	 *
+	 */
 	private class ServerQuerier extends Thread {
 		public void run() {
 			mw.printlnMC("Querying server for player list...");
@@ -328,6 +358,11 @@ public class ServerTab extends JPanel{
 		}
 	}
 	
+	/**
+	 * 
+	 * Comparator to compare the time connected for each connected player.
+	 *
+	 */
 	private class TimeConnectedComparator implements Comparator<String> {
 		@Override
 		public int compare(String o1, String o2) {
@@ -359,4 +394,5 @@ public class ServerTab extends JPanel{
 			return 0;
 		}	
 	}
+	
 }

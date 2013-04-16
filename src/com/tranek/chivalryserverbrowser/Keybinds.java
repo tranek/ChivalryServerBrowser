@@ -2,7 +2,12 @@ package com.tranek.chivalryserverbrowser;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/**
+ * 
+ * A data structure class containing the names of all of the gamepad buttons
+ * and the names of all of the commands as used by the UDKSystemSettings.ini.
+ *
+ */
 public class Keybinds {
 
 	//Xbox 360 Controller Buttons
@@ -75,7 +80,10 @@ public class Keybinds {
 	public static final String DO_PARRY = "DoParry";
 	public static final String ON_RELEASE_LOWER_SHIELD = "Onrelease LowerShield";
 	
-	
+	/**
+	 * All of the commands sorted alphabetically. This is synched with the {@link HashMap}
+	 * of the command descriptions.
+	 */
 	@SuppressWarnings("serial")
 	public static final ArrayList<String> commands = new ArrayList<String>() {
 		{
@@ -127,6 +135,10 @@ public class Keybinds {
 		}
 	};
 	
+	/**
+	 * All of the command descriptions sorted alphabetically. This is synched with the {@link ArrayList}
+	 * of the commands.
+	 */
 	@SuppressWarnings("serial")
 	public static final HashMap<String, String> commandDescriptions = new HashMap<String, String>() {
 		{

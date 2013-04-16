@@ -5,10 +5,25 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * Tab that can view and change gamepad button bindings for Chivalry: Medieval Warfare.
+ * It shows a picture of an XBox360 controller with a {@link JButton} for every gamepad button.
+ * Clicking a button's button brings up a {@link GamepadKeybindDialog} that shows the
+ * user every command currently bound to that button and allows him/her to make any
+ * changes that he/she wants to to the bound commands.
+ *
+ */
 @SuppressWarnings("serial")
 public class GamepadKeybindTab extends JPanel {
+	/** Reference to the MainWindow for its utility methods. */
 	private final MainWindow mw;
 	
+	/**
+	 * Creates a new GamepadKeybindTab.
+	 * 
+	 * @param MW the MainWindow used for its utility methods
+	 */
 	public GamepadKeybindTab(MainWindow MW) {
 		mw = MW;
 		setLayout(null);
