@@ -81,7 +81,7 @@ public class MasterServerQuery {
 	}
 	
 	public void applyFiltersAndQueryServers(ChivServer server, Set<Future<ChivServer>> set) {
-		Callable<ChivServer> callable = new QueryWorker(server.mIP, Integer.parseInt(server.mQueryPort), sf, synch, pool);
+		Callable<ChivServer> callable = new QueryWorker(server.mIP, Integer.parseInt(server.mQueryPort), sf, synch, pool, mw);
 		Future<ChivServer> future = pool.submit(callable);
 		set.add(future);
 	}

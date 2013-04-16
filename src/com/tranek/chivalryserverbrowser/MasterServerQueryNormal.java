@@ -26,13 +26,13 @@ public class MasterServerQueryNormal extends MasterServerQuery {
 				sName.substring(0, 19).equals("official lts server") ||
 				sName.substring(0, 19).equals("official tdm server") ||
 				sName.substring(0, 18).equals("official to server") ) ) {
-					Callable<ChivServer> callable = new QueryWorker(server.mIP, Integer.parseInt(server.mQueryPort), sf, synch, pool);
+					Callable<ChivServer> callable = new QueryWorker(server.mIP, Integer.parseInt(server.mQueryPort), sf, synch, pool, mw);
 					Future<ChivServer> future = pool.submit(callable);
 					set.add(future);
 			}
 		} else if ( server.mName != null && server.mName.toLowerCase().contains(serverNameFilter)
 				&& ( sf.type.equals("All") || sf.type.equals(gametype) ) ) {
-			Callable<ChivServer> callable = new QueryWorker(server.mIP, Integer.parseInt(server.mQueryPort), sf, synch, pool);
+			Callable<ChivServer> callable = new QueryWorker(server.mIP, Integer.parseInt(server.mQueryPort), sf, synch, pool, mw);
 			Future<ChivServer> future = pool.submit(callable);
 			set.add(future);
 		}
