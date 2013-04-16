@@ -35,46 +35,23 @@ public class QueryServerCondenser {
 		
 		try {
 			server = new SourceServer(InetAddress.getAllByName(mIPaddress)[0], mPort);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (SteamCondenserException e) {
-			e.printStackTrace();
-		}
-		try {
 			server.initialize();
-		} catch (SteamCondenserException e) {
-			e.printStackTrace();
-		} catch (TimeoutException e) {}
-		try {
+
 			port = "" + server.getServerInfo().get("serverPort");					
-		} catch (SteamCondenserException e) {
-			e.printStackTrace();
-		} catch (TimeoutException e) {}
-		try {
 			ping = "" + server.getPing();
-		} catch (SteamCondenserException e) {
-			e.printStackTrace();
-		} catch (TimeoutException e) {}
-		
-		try {
+
 			HashMap<String, Object> sinfo = server.getServerInfo();
 			mMaxPlayers = "" + sinfo.get("maxPlayers");
 			mCurrentPlayers = "" + sinfo.get("numberOfPlayers");
 			mMap = "" + sinfo.get("mapName");
 			mName = "" + sinfo.get("serverName");
-		} catch (SteamCondenserException e) {
-			e.printStackTrace();
-		} catch (TimeoutException e) {}
-		
-		try {
+			
 			HashMap<String, String> rules = server.getRules();
-			mHasPassword = rules.get("p1342177286");
-			mMinRank = rules.get("p1342177292");
-			mMaxRank = rules.get("p1342177293");
-			mPerspective = rules.get("p1342177291");
-		} catch (SteamCondenserException e) {
-			e.printStackTrace();
-		} catch (TimeoutException e) {}
+			mHasPassword = rules.get(ChivServer.RULE_PASSWORD);
+			mMinRank = rules.get(ChivServer.RULE_MIN_RANK);
+			mMaxRank = rules.get(ChivServer.RULE_MAX_RANK);
+			mPerspective = rules.get(ChivServer.RULE_PERSPECTIVE);
+		} catch (TimeoutException | SteamCondenserException | UnknownHostException e) {}
 
 		HashMap<String, String> ret = new HashMap<String, String>();
 		ret.put("gameport", port);

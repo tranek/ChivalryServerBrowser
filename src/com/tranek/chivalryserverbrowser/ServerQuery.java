@@ -15,21 +15,32 @@ import com.github.koraktor.steamcondenser.steam.servers.SourceServer;
  *
  */
 public class ServerQuery {
-	/** 
-	 * The ChivServer to be queried. This can be used for the basic ChivServer data structure
-	 * or used to refresh this ChivServer's info.
-	 */
-	private ChivServer cs;
+	/** The IP address of the server. */
+	private String ip;
+	/** The queryport of the server. */
+	private int queryport;
 	/** The SteamCondenser SourceServer. */
 	private SourceServer server;
 	
 	/**
-	 * Creates a new ServerQuery.
+	 * Creates a new ServerQuery from a ChivServer.
 	 * 
 	 * @param cs the ChivServer to get information about
 	 */
 	public ServerQuery(ChivServer cs) {
-		this.cs = cs;
+		ip = cs.mIP;
+		queryport = Integer.parseInt(cs.mQueryPort);
+	}
+	
+	/**
+	 * Creates a new ServerQuery from an IP address and queryport.
+	 * 
+	 * @param ip the IP address of the server
+	 * @param queryport the queryport of the server
+	 */
+	public ServerQuery(String ip, int queryport) {
+		this.ip = ip;
+		this.queryport = queryport;
 	}
 	
 	/**
@@ -39,7 +50,7 @@ public class ServerQuery {
 	 */
 	public HashMap<String, SteamPlayer> getPlayers() {
 		try {
-			server = new SourceServer(InetAddress.getAllByName(cs.mIP)[0], Integer.parseInt(cs.mQueryPort));
+			server = new SourceServer(InetAddress.getAllByName(ip)[0], queryport);
 			HashMap<String, SteamPlayer> players = server.getPlayers();
 			return players;
 		} catch (NumberFormatException | UnknownHostException
@@ -54,7 +65,7 @@ public class ServerQuery {
 	 */
 	public HashMap<String, Object> getInfo() {
 		try {
-			server = new SourceServer(InetAddress.getAllByName(cs.mIP)[0], Integer.parseInt(cs.mQueryPort));
+			server = new SourceServer(InetAddress.getAllByName(ip)[0], queryport);
 			HashMap<String, Object> info = server.getServerInfo();
 			return info;
 		} catch (NumberFormatException | UnknownHostException
@@ -69,7 +80,7 @@ public class ServerQuery {
 	 */
 	public HashMap<String, String> getRules() {
 		try {
-			server = new SourceServer(InetAddress.getAllByName(cs.mIP)[0], Integer.parseInt(cs.mQueryPort));
+			server = new SourceServer(InetAddress.getAllByName(ip)[0], queryport);
 			HashMap<String, String> rules = server.getRules();
 			return rules;
 		} catch (NumberFormatException | UnknownHostException
