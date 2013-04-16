@@ -254,6 +254,12 @@ public class ChivServer {
 		return null;
 	}
 	
+	/**
+	 * Gets the game mode for a map based on its prefix.
+	 * 
+	 * @param mapname the map name
+	 * @return the game mode as a string
+	 */
 	public static String getGameMode(String mapname) {
 		String gamemode = "";
 		String prefix = mapname.split("-")[0];
