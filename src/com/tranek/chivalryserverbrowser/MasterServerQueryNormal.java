@@ -24,15 +24,14 @@ public class MasterServerQueryNormal {
 	private ServerFilters sf;
 	public ExecutorService pool;
 	private Synchronizer synch;
-	public boolean terminated = false;
 	public Vector<ChivServer> slist;
 	
 	public MasterServerQueryNormal(MainWindow mw, ServerFilters sf) {
 		this.sf = sf;
 		this.mw = mw;
-	};
+	}
 	
-	public Vector<ChivServer> queryMasterServer(ServerFilters sf, DefaultTableModel dataModel) throws IOException, InterruptedException {
+	public void queryMasterServer(ServerFilters sf, DefaultTableModel dataModel) throws IOException, InterruptedException {
 		this.sf = sf;
 		slist = new Vector<ChivServer>();
 		synch = new Synchronizer(dataModel, mw.servers, mw);
@@ -71,66 +70,35 @@ public class MasterServerQueryNormal {
 					sName.substring(0, 19).equals("official lts server") ||
 					sName.substring(0, 19).equals("official tdm server") ||
 					sName.substring(0, 18).equals("official to server") ) ) {
-						//Callable<ChivServer> callable = new QueryWorker(dataModel, server);
 						Callable<ChivServer> callable = new QueryWorker(server);
 						Future<ChivServer> future = pool.submit(callable);
 						set.add(future);
-						//pool.execute(new QueryWorker(dataModel, server));
 				}
 			} else if ( server.getName() != null && server.getName().toLowerCase().contains(serverNameFilter)
 					&& ( sf.type.equals("All") || sf.type.equals(gametype) ) ) {
-				//Callable<ChivServer> callable = new QueryWorker(dataModel, server);
 				Callable<ChivServer> callable = new QueryWorker(server);
 				Future<ChivServer> future = pool.submit(callable);
 				set.add(future);
-				//pool.execute(new QueryWorker(dataModel, server));
 			}		
 		}
 		
 		// Iterate through the results and compile into one list
+		// Synchronizes this thread with its spawned threads
 	    for ( Future<ChivServer> future : set ) {
-
-	    	if ( terminated ) {
-	    		//break;
-	    		if ( !future.cancel(true) ) {
-	    			try {
-						if ( future.get() != null ) {
-							slist.add(future.get());
-						}
-					} catch (ExecutionException e) {
-						//e.printStackTrace();
-					}
-	    		} else {
-	    			continue;
-	    		}
-	    		
-	    	}
 	    	try {
 				if ( future.get() != null ) {
 					slist.add(future.get());
 				}
-	    	}
-	    	catch ( Exception e ) {
-	    		//e.printStackTrace();
-	    	}
+			} catch (ExecutionException e) {}
 	    }
-
-		return slist;
 	}
 	
 	// call the queryservercondenser, create the chivserver, add row to datamodel
-	// returns to main thread to be added to a set, iterate set to add to slist
-	// or just add to slist?
+	// returns to main thread to be added to a set, add to slist
 	private class QueryWorker implements Callable<ChivServer> {
 		
-		//private DefaultTableModel dataModel;
 		private SourceServer server;
 		private ChivServer cs;
-
-		/*public QueryWorker(DefaultTableModel datamodel, SourceServer server) {
-			this.dataModel = datamodel;
-			this.server = server;
-		}*/
 		
 		public QueryWorker(SourceServer server) {
 			this.server = server;
@@ -318,15 +286,7 @@ public class MasterServerQueryNormal {
 		mw.printlnMC("Refreshing stopped.");
 		if (pool != null) {
 			pool.shutdownNow();
-			//while ( !pool.isTerminated() ) {}
-			/*try {
-				pool.awaitTermination(500, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}*/
 		}
-		//pool.shutdown();
-		terminated = true;
 	}
 	
 	public String getGameType(String mapname) {
@@ -372,8 +332,6 @@ public class MasterServerQueryNormal {
 		public synchronized HashMap<String, String> getLocFromOtherServer(String location) {
 			for ( ChivServer c : servers ) {
 				if ( !c.mLatitude.equals("") && !c.mLongitude.equals("") && c.mLocation.equals(location)) {
-					//cs.mLatitude = c.mLatitude;
-					//cs.mLongitude = c.mLongitude;
 					HashMap<String, String> result = new HashMap<String, String>();
 					result.put("latitude", c.mLatitude);
 					result.put("longitude", c.mLongitude);
@@ -389,4 +347,5 @@ public class MasterServerQueryNormal {
 			}
 		}
 	}
+	
 }

@@ -24,7 +24,6 @@ public class MasterServerQueryHistory {
 	private ServerFilters sf;
 	public ExecutorService pool;
 	private Synchronizer synch;
-	public boolean terminated = false;
 	public Vector<ChivServer> slist;
 	
 	public MasterServerQueryHistory(MainWindow mw, ServerFilters sf) {
@@ -32,7 +31,7 @@ public class MasterServerQueryHistory {
 		this.mw = mw;
 	};
 	
-	public Vector<ChivServer> queryMasterServer(ServerFilters sf, DefaultTableModel dataModel) throws IOException, InterruptedException {
+	public void queryMasterServer(ServerFilters sf, DefaultTableModel dataModel) throws IOException, InterruptedException {
 		this.sf = sf;
 		slist = new Vector<ChivServer>();
 		synch = new Synchronizer(dataModel, mw.serversHist, mw);
@@ -47,106 +46,24 @@ public class MasterServerQueryHistory {
 			Future<ChivServer> future = pool.submit(callable);
 			set.add(future);
 		}
-
 		
 		// Iterate through the results and compile into one list
+		// Synchronizes this thread with its spawned threads
 	    for ( Future<ChivServer> future : set ) {
-
-	    	if ( terminated ) {
-	    		//break;
-	    		if ( !future.cancel(true) ) {
-	    			try {
-						if ( future.get() != null ) {
-							ChivServer cs = future.get();
-
-							if ( cs.mName == null ) {
-								continue;
-							}
-							
-							String gametype = getGameType(cs.mMap);
-							String serverNameFilter = sf.name.toLowerCase();
-							String sName = cs.mName.toLowerCase();
-							
-							if ( sf.officialservers && ( sf.type.equals("All") || sf.type.equals(gametype) ) ) {
-								if ( (sName.length() >  23) && ( sName.substring(0, 20).equals("official duel server") ||
-									sName.substring(0, 23).equals("official classic server") ||
-									sName.substring(0, 19).equals("official ffa server") ||
-									sName.substring(0, 19).equals("official lts server") ||
-									sName.substring(0, 19).equals("official tdm server") ||
-									sName.substring(0, 18).equals("official to server") ) ) {
-									
-									slist.add(cs);
-								}
-							} else if ( cs.mName != null && cs.mName.toLowerCase().contains(serverNameFilter)
-									&& ( sf.type.equals("All") || sf.type.equals(gametype) ) ) {
-								slist.add(cs);
-							}		
-						}
-					} catch (ExecutionException e) {
-						//e.printStackTrace();
-					}
-	    		} else {
-	    			continue;
-	    		}	
-	    	}
 	    	try {
-				if ( future.get() != null ) {		
-					ChivServer cs = future.get();
-					
-					if ( cs.mName == null ) {
-						continue;
-					}
-					
-					String gametype = getGameType(cs.mMap);
-					String serverNameFilter = sf.name.toLowerCase();
-					String sName = cs.mName.toLowerCase();
-					
-					if ( sf.officialservers && ( sf.type.equals("All") || sf.type.equals(gametype) ) ) {
-						if ( (sName.length() >  23) && ( sName.substring(0, 20).equals("official duel server") ||
-							sName.substring(0, 23).equals("official classic server") ||
-							sName.substring(0, 19).equals("official ffa server") ||
-							sName.substring(0, 19).equals("official lts server") ||
-							sName.substring(0, 19).equals("official tdm server") ||
-							sName.substring(0, 18).equals("official to server") ) ) {
-							
-							slist.add(cs);
-						}
-					} else if ( cs.mName != null && cs.mName.toLowerCase().contains(serverNameFilter)
-							&& ( sf.type.equals("All") || sf.type.equals(gametype) ) ) {
-						slist.add(cs);
-					}
+				if ( future.get() != null ) {
+					slist.add(future.get());
 				}
-	    	}
-	    	catch ( Exception e ) {
-	    		//e.printStackTrace();
-	    	}
+			} catch (ExecutionException e) {}
 	    }
-
-		return slist;
 	}
 	
 	// call the queryservercondenser, create the chivserver, add row to datamodel
-	// returns to main thread to be added to a set, iterate set to add to slist
-	// or just add to slist?
 	private class QueryWorker implements Callable<ChivServer> {
-		
-		//private DefaultTableModel dataModel;
-		//private SourceServer server;
 		private ChivServer cs;
 		private String sip;
 		private int sport;
 
-		/*public QueryWorker(DefaultTableModel datamodel, SourceServer server) {
-			this.dataModel = datamodel;
-			this.server = server;
-		}*/
-		
-		/*public QueryWorker(SourceServer server) {
-			this.server = server;
-			sip = server.getIP();
-			sport = server.getPort();
-		}*/
-		
 		public QueryWorker(String ip, int port) {
 			sip = ip;
 			sport = port;
@@ -355,8 +272,6 @@ public class MasterServerQueryHistory {
 		if (pool != null) {
 			pool.shutdownNow();
 		}
-		//pool.shutdown();
-		terminated = true;
 	}
 	
 	public String getGameType(String mapname) {
