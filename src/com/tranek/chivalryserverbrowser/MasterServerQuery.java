@@ -33,11 +33,10 @@ public class MasterServerQuery {
 		this.sf = sf;
 		slist = new Vector<ChivServer>();
 		synch = new QueryWorkerSynch(dataModel, getServerList(), mw);
-		pool = Executors.newFixedThreadPool(1);
+		pool = Executors.newFixedThreadPool(sf.numThreads);
 		Vector<ChivServer> serverList = getServers();
 		mw.printlnMC("Retrieved list of servers.");
 		mw.printlnMC("Querying individual servers...");
-		mw.printlnMC("list size = " + serverList.size());
 		Thread.sleep(2000);
 		queryIndividualServers(serverList);
 	}
@@ -67,9 +66,6 @@ public class MasterServerQuery {
 	public void queryIndividualServers(Vector<ChivServer> serverList) throws InterruptedException {
 		Set<Future<ChivServer>> set = new HashSet<Future<ChivServer>>();
 		for (ChivServer server: serverList) {
-			if ( server.mName == null ) {
-				continue;
-			}
 			applyFiltersAndQueryServers(server, set);
 		}
 		
@@ -85,28 +81,9 @@ public class MasterServerQuery {
 	}
 	
 	public void applyFiltersAndQueryServers(ChivServer server, Set<Future<ChivServer>> set) {
-		String gametype = ChivServer.getGameMode(server.mMap);
-		String serverNameFilter = sf.name.toLowerCase();
-		String sName = server.mName.toLowerCase();
-		mw.printlnMC("In mSQ applyfilters&query");
-		
-		if ( sf.officialservers && ( sf.type.equals("All") || sf.type.equals(gametype) ) ) {
-			if ( (sName.length() >  23) && ( sName.substring(0, 20).equals("official duel server") ||
-				sName.substring(0, 23).equals("official classic server") ||
-				sName.substring(0, 19).equals("official ffa server") ||
-				sName.substring(0, 19).equals("official lts server") ||
-				sName.substring(0, 19).equals("official tdm server") ||
-				sName.substring(0, 18).equals("official to server") ) ) {
-					Callable<ChivServer> callable = new QueryWorker(server.mIP, Integer.parseInt(server.mQueryPort), sf, synch, pool);
-					Future<ChivServer> future = pool.submit(callable);
-					set.add(future);
-			}
-		} else if ( server.mName != null && server.mName.toLowerCase().contains(serverNameFilter)
-				&& ( sf.type.equals("All") || sf.type.equals(gametype) ) ) {
-			Callable<ChivServer> callable = new QueryWorker(server.mIP, Integer.parseInt(server.mQueryPort), sf, synch, pool);
-			Future<ChivServer> future = pool.submit(callable);
-			set.add(future);
-		}
+		Callable<ChivServer> callable = new QueryWorker(server.mIP, Integer.parseInt(server.mQueryPort), sf, synch, pool);
+		Future<ChivServer> future = pool.submit(callable);
+		set.add(future);
 	}
 	
 	public void stopRefreshing(MainWindow mw) {

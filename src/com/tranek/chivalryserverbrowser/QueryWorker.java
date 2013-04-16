@@ -218,8 +218,4 @@ class QueryWorker implements Callable<ChivServer> {
 		return null;
 	}
 	
-	public void applyFiltersAndAddToTable() {
-		
-	}
-	
 }

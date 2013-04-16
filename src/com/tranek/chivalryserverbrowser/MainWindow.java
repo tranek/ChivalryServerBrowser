@@ -937,8 +937,8 @@ public class MainWindow {
 			System.out.println(urlstring + getLaunchOptions());
 			dt.browse(url);
 			mw.printlnMC("Joining server: " + serverName + " " + ip + ":" + port + " ...");
-			mw.stopAllRefreshing();
 			addServerToHistory(cs);
+			mw.stopAllRefreshing();
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
