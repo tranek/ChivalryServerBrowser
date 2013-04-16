@@ -130,6 +130,43 @@ public class ChivServer {
 		HashMap<String, String> info = qsc.getInfo();
 		String location = "";
 		String lat = "";
+		String lon = "";		
+		HashMap<String, String> loc = getLocation(mw, ip);
+		location = loc.get("location");
+		lat = loc.get("latitude");
+		lon = loc.get("longitude");
+		
+		String gamemode = getGameMode(info.get("map"));
+		
+		return new ChivServer(info.get("name"), ip, "" + queryport, info.get("gameport"),
+				info.get("map"), gamemode, info.get("ping"), info.get("maxplayers"),
+				info.get("currentplayers"), info.get("haspassword"), info.get("minrank"),
+				info.get("maxrank"), location, info.get("perspective"), lat, lon);
+	}
+	
+	/**
+	 * Creates a new clone of this {@link ChivServer}.
+	 */
+	@Override
+	public ChivServer clone() {
+		return new ChivServer(mName, mIP, mQueryPort, mGamePort, mMap, mGameMode, mPing,
+				mMaxPlayers, mCurrentPlayers, mHasPassword, mMinRank, mMaxRank, mLocation,
+				mPerspective, mLatitude, mLongitude);
+	}
+
+	/**
+	 * Gets the location for an IP address. It also adds a slight bit of randomness to its
+	 * latitude and longitude so that multiple servers in a single data center don't overlap
+	 * their markers on the map.
+	 * 
+	 * @param ip the IP address for the server
+	 * @return a HashMap of the location, latitude, and longitude
+	 */
+	public static HashMap<String, String> getLocation(MainWindow mw, String ip) {
+		HashMap<String, String> result = new HashMap<String, String>();
+		
+		String location = "";
+		String lat = "";
 		String lon = "";
 		LocationRIPE l = new LocationRIPE();
 		HashMap<String, String> loc = l.getLocation(ip);
@@ -213,22 +250,10 @@ public class ChivServer {
 			lon = "" + lond;
 		}
 		
-		String gamemode = getGameMode(info.get("map"));
-		
-		return new ChivServer(info.get("name"), ip, "" + queryport, info.get("gameport"),
-				info.get("map"), gamemode, info.get("ping"), info.get("maxplayers"),
-				info.get("currentplayers"), info.get("haspassword"), info.get("minrank"),
-				info.get("maxrank"), location, info.get("perspective"), lat, lon);
-	}
-	
-	/**
-	 * Creates a new clone of this {@link ChivServer}.
-	 */
-	@Override
-	public ChivServer clone() {
-		return new ChivServer(mName, mIP, mQueryPort, mGamePort, mMap, mGameMode, mPing,
-				mMaxPlayers, mCurrentPlayers, mHasPassword, mMinRank, mMaxRank, mLocation,
-				mPerspective, mLatitude, mLongitude);
+		result.put("location", location);
+		result.put("latitude", lat);
+		result.put("longitude", lon);
+		return result;
 	}
 	
 	/**
