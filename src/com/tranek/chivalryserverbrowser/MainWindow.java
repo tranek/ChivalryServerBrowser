@@ -88,7 +88,7 @@ public class MainWindow {
 	/** The JTabbedPane that holds all of the tabs. */
 	protected JTabbedPane tabbedPane;
 	/** Tab for normal server list. */
-	protected ServerListTab serverListTab;
+	protected ServerListNormalTab serverListTab;
 	/** Tab for beta server list. */
 	protected ServerListBetaTab serverListBetaTab;
 	/** Tab for favorite server list. */
@@ -162,7 +162,7 @@ public class MainWindow {
 		frmChivalryServers.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-		serverListTab = new ServerListTab(this);
+		serverListTab = new ServerListNormalTab(this);
 		tabbedPane.addTab("Server List", null, serverListTab, null);
 
 		mapTab = new JPanel();
@@ -746,7 +746,7 @@ public class MainWindow {
 	/**
 	 * Stops all server list tabs from refreshing.
 	 * 
-	 * @see Refresher
+	 * @see RefresherNormal
 	 * @see RefresherBeta
 	 * @see RefresherFav
 	 * @see RefresherHistory

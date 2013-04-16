@@ -18,7 +18,7 @@ import net.barkerjr.gameserver.valve.SourceServer;
 import net.barkerjr.gameserver.valve.SourceServerList;
 import net.barkerjr.gameserver.valve.ValveServerList;
 
-public class MasterServerQuery {
+public class MasterServerQueryNormal {
 	
 	private final MainWindow mw;
 	private ServerFilters sf;
@@ -27,7 +27,7 @@ public class MasterServerQuery {
 	public boolean terminated = false;
 	public Vector<ChivServer> slist;
 	
-	public MasterServerQuery(MainWindow mw, ServerFilters sf) {
+	public MasterServerQueryNormal(MainWindow mw, ServerFilters sf) {
 		this.sf = sf;
 		this.mw = mw;
 	};

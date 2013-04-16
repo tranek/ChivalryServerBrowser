@@ -11,14 +11,14 @@ import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteStatement;
 
 @SuppressWarnings("serial")
-public class ServerListTab extends JPanel implements ServerListInterface {
+public class ServerListNormalTab extends JPanel implements ServerListInterface {
 	private final MainWindow mw;
 	public ServerFilters sf = new ServerFilters();
-	public Refresher refresher;
+	public RefresherNormal refresher;
 	public FiltersPanel fp;
 	public ServerTable st;
 	
-	public ServerListTab(final MainWindow mw) {
+	public ServerListNormalTab(final MainWindow mw) {
 		super();
 		this.mw = mw;
 		initialize();
@@ -49,7 +49,7 @@ public class ServerListTab extends JPanel implements ServerListInterface {
 		
 		mw.servers = new Vector<ChivServer>();
 		
-		refresher = new Refresher(mw, this);
+		refresher = new RefresherNormal(mw, this);
 		refresher.start();
 	}
 	

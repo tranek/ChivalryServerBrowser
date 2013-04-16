@@ -3,16 +3,16 @@ import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
-public class Refresher extends Thread {
+public class RefresherNormal extends Thread {
 	
 	private MainWindow mw;
-	private MasterServerQuery msq;
-	private ServerListTab sl;
+	private MasterServerQueryNormal msq;
+	private ServerListNormalTab sl;
 	
-	public Refresher(MainWindow mw, ServerListTab slt) {
+	public RefresherNormal(MainWindow mw, ServerListNormalTab slt) {
 		this.mw = mw;
 		this.sl = slt;
-		msq = new MasterServerQuery(this.mw, sl.sf);
+		msq = new MasterServerQueryNormal(this.mw, sl.sf);
 	}
 	
 	public void run() {
