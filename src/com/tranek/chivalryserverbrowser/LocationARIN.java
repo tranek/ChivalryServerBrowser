@@ -11,9 +11,9 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Location {
+public class LocationARIN {
 
-	public Location() {}
+	public LocationARIN() {}
 	
 	public HashMap<String, String> getLocation(String ip) {
 		HashMap<String, String> location = new HashMap<String, String>();
