@@ -23,7 +23,7 @@ public class RefresherFav extends Thread {
 				mw.printlnMC("Refreshing favorite servers...");
 			}
 			
-			msq.queryMasterServer(sl.sf, (DefaultTableModel)sl.st.dataModel);
+			msq.queryServers(sl.sf, (DefaultTableModel)sl.st.dataModel);
 			
 			if ( mw.serversFav != null ) {
 				int count = 0;

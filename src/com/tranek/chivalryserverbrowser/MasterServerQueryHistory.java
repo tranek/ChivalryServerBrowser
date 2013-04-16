@@ -24,14 +24,14 @@ public class MasterServerQueryHistory {
 	private ServerFilters sf;
 	public ExecutorService pool;
 	private Synchronizer synch;
-	public Vector<ChivServer> slist;
+	private Vector<ChivServer> slist;
 	
 	public MasterServerQueryHistory(MainWindow mw, ServerFilters sf) {
 		this.sf = sf;
 		this.mw = mw;
 	};
 	
-	public void queryMasterServer(ServerFilters sf, DefaultTableModel dataModel) throws IOException, InterruptedException {
+	public void queryServers(ServerFilters sf, DefaultTableModel dataModel) throws IOException, InterruptedException {
 		this.sf = sf;
 		slist = new Vector<ChivServer>();
 		synch = new Synchronizer(dataModel, mw.serversHist, mw);

@@ -23,7 +23,7 @@ public class RefresherHistory extends Thread {
 				mw.printlnMC("Refreshing recently visited servers...");
 			}
 			
-			msq.queryMasterServer(sl.sf, (DefaultTableModel)sl.st.dataModel);
+			msq.queryServers(sl.sf, (DefaultTableModel)sl.st.dataModel);
 			
 			if ( mw.serversHist != null ) {
 				int count = 0;

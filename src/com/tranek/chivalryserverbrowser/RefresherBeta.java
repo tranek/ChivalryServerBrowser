@@ -23,7 +23,7 @@ public class RefresherBeta extends Thread {
 				mw.printlnMC("Refreshing beta servers...");
 			}
 			
-			msq.queryMasterServer(sl.sf, (DefaultTableModel)sl.st.dataModel);
+			msq.queryServers(sl.sf, (DefaultTableModel)sl.st.dataModel);
 			
 			if ( mw.serversBeta != null ) {
 				int count = 0;

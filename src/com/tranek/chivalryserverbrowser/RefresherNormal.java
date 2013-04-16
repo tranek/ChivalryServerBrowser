@@ -25,7 +25,7 @@ public class RefresherNormal extends Thread {
 				mw.printlnMC("Refreshing servers...");
 			}
 
-			msq.queryMasterServer(sl.sf, (DefaultTableModel)sl.st.dataModel);
+			msq.queryServers(sl.sf, (DefaultTableModel)sl.st.dataModel);
 			
 			if ( mw.servers != null ) {
 				int count = 0;

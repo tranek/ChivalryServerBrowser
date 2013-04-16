@@ -99,6 +99,21 @@ public class ChivServer {
 	}
 	
 	/**
+	 * Creates a new {@link ChivServer} with only a name, ip address, queryport, and map.
+	 * 
+	 * @param name the server's name
+	 * @param ip the server's ip address
+	 * @param queryport the server's queryport
+	 * @param map the server's map
+	 */
+	public ChivServer(String name, String ip, String queryport, String map) {
+		mName = name;
+		mIP = ip;
+		mQueryPort = queryport;
+		mMap = map;
+	}
+	
+	/**
 	 * Static method to create a new {@link ChivServer} by querying the server directly
 	 * from its IP address and queryport.
 	 * 

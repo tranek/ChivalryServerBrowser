@@ -1,37 +1,75 @@
 package com.tranek.chivalryserverbrowser;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import javax.swing.table.DefaultTableModel;
 
 import net.barkerjr.gameserver.GameServer.Request;
 import net.barkerjr.gameserver.valve.SourceServer;
 import net.barkerjr.gameserver.valve.SourceServerList;
 import net.barkerjr.gameserver.valve.ValveServerList;
 
-public class MasterServerQueryBeta {
-	
-	private final MainWindow mw;
-	private ServerFilters sf;
-	public ExecutorService pool;
-	private Synchronizer synch;
-	public Vector<ChivServer> slist;
+public class MasterServerQueryBeta extends MasterServerQuery {
 	
 	public MasterServerQueryBeta(MainWindow mw, ServerFilters sf) {
-		this.sf = sf;
-		this.mw = mw;
+		super(mw, sf);
 	}
 	
-	public void queryMasterServer(ServerFilters sf, DefaultTableModel dataModel) throws IOException, InterruptedException {
+	@Override
+	public Vector<ChivServer> getServers() throws IOException {
+		SourceServerList list = new SourceServerList();
+		list.gameDir = "chivalrymedievalwarfarebeta";
+		HashSet<SourceServer> serverList = new HashSet<SourceServer>();
+		Vector<ChivServer> cServers = new Vector<ChivServer>();
+		ValveServerList<SourceServer>.ServerIterator servers = list.iterator(10000);
+		try {
+			while (servers.hasNext()) {
+				SourceServer server = servers.next();
+				serverList.add(server);
+				server.load(Request.INFORMATION);
+			}
+		} finally {
+			servers.close();
+		}
+		for ( SourceServer server : serverList ) {
+			String name = server.getName();
+			mw.printlnMC("Name = " + name);
+			String ip = server.getIP();
+			String port = "" + server.getPort();
+			String map = "" + server.getMap();
+			cServers.add(new ChivServer(name, ip, port, map));
+		}
+		return cServers;
+	}
+	
+	@Override
+	public void applyFiltersAndQueryServers(ChivServer server, Set<Future<ChivServer>> set) {
+		mw.printlnMC("In applyfilters&query");
+		String gametype = ChivServer.getGameMode(server.mMap);
+		String serverNameFilter = sf.name.toLowerCase();
+		String sName = server.mName.toLowerCase();
+		
+		if ( sf.officialservers && ( sf.type.equals("All") || sf.type.equals(gametype) ) ) {
+			if ( sName.contains("official beta server") ) {
+					Callable<ChivServer> callable = new QueryWorker(server.mIP, Integer.parseInt(server.mQueryPort), sf, synch, pool);
+					Future<ChivServer> future = pool.submit(callable);
+					set.add(future);
+			}
+		} else if ( server.mName != null && server.mName.toLowerCase().contains(serverNameFilter)
+				&& ( sf.type.equals("All") || sf.type.equals(gametype) ) ) {
+			Callable<ChivServer> callable = new QueryWorker(server.mIP, Integer.parseInt(server.mQueryPort), sf, synch, pool);
+			Future<ChivServer> future = pool.submit(callable);
+			set.add(future);
+		}
+	}
+	
+	public Vector<ChivServer> getServerList() {
+		return mw.serversBeta;
+	}
+	
+	/*public void queryServers(ServerFilters sf, DefaultTableModel dataModel) throws IOException, InterruptedException {
 		this.sf = sf;
 		slist = new Vector<ChivServer>();
 		synch = new Synchronizer(dataModel, mw.serversBeta, mw);
@@ -340,6 +378,6 @@ public class MasterServerQueryBeta {
 				mw.addMarker(mw.serverListBetaTab, cs);
 			}
 		}
-	}
+	}*/
 	
 }
