@@ -10,6 +10,15 @@ import java.util.Vector;
  */
 public class ChivServer {
 
+	/** Game rule for if the server has a password. */
+	public static final String RULE_PASSWORD = "p1342177286";
+	/** Game rule for the server's minimum rank. */
+	public static final String RULE_MIN_RANK = "p1342177292";
+	/** Game rule for the server's maximum rank. */
+	public static final String RULE_MAX_RANK = "p1342177293";
+	/** Game rule for the server's perspective. */
+	public static final String RULE_PERSPECTIVE = "p1342177291";
+	
 	/** The server's name. */
 	protected String mName;
 	/** The server's IP address. */
