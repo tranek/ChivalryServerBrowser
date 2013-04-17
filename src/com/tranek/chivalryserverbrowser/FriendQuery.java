@@ -259,9 +259,6 @@ public class FriendQuery extends Thread {
 	            SteamProfile friendProfile = new SteamProfile(friendURL, nickname, stateMessage);
 	            synch.addToList(friendProfile);
 	            //System.out.println(nickname + ": " + stateMessage);
-	            if ( nickname.equals("RK | Blaine") ) {
-	            	System.out.println(nickname + ": " + stateMessage);
-	            }
 	            
 	            Object[] rowData = {nickname, stateMessage, "", "", "", "", ""};
 	            if ( inChiv && checkIfInChivalry(stateMessage)) {

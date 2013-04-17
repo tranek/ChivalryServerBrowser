@@ -160,6 +160,8 @@ public class FriendsTab extends JPanel {
 		playerListTable.setAutoCreateRowSorter(true);
 		TableRowSorter<?> trs = (TableRowSorter<?>) playerListTable.getRowSorter();
 		trs.setComparator(4, new PlayerComparator());
+		trs.toggleSortOrder(2);
+		trs.toggleSortOrder(2);
 		playerListTable.getColumnModel().getColumn(3).setMaxWidth(400); // IP address
 		playerListTable.getColumnModel().getColumn(3).setPreferredWidth(130); // IP address
 		playerListTable.getColumnModel().getColumn(4).setMaxWidth(70); // Player count
