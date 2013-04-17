@@ -752,15 +752,15 @@ public class MainWindow {
 	 * @see RefresherHistory
 	 */
 	public void stopAllRefreshing() {
-		serverListTab.refresher.stopRefreshing(mw);
+		serverListTab.refresher.stopRefreshing();
 		if ( serverListBetaTab.refresher != null ) {
-			serverListBetaTab.refresher.stopRefreshing(mw);
+			serverListBetaTab.refresher.stopRefreshing();
 		}
 		if ( serverListFavTab.refresher != null ) {
-			serverListFavTab.refresher.stopRefreshing(mw);
+			serverListFavTab.refresher.stopRefreshing();
 		}
 		if ( serverListHistoryTab.refresher != null ) {
-			serverListHistoryTab.refresher.stopRefreshing(mw);
+			serverListHistoryTab.refresher.stopRefreshing();
 		}
 	}
 

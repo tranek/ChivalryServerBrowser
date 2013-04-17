@@ -39,7 +39,7 @@ public class ServerListFavTab extends JPanel implements ServerListInterface {
 		
 		if ( refresher != null) {
 			refresher.stop();
-			refresher.stopRefreshing(mw);
+			refresher.stopRefreshing();
 		}
 		
 		updateFilters();
@@ -276,6 +276,16 @@ public class ServerListFavTab extends JPanel implements ServerListInterface {
 			return false;
 		}
 		return refresher.isRefreshing();
+	}
+
+	@Override
+	public ServerFilters getFilters() {
+		return sf;
+	}
+
+	@Override
+	public DefaultTableModel getTableModel() {
+		return (DefaultTableModel)(st.dataModel);
 	}
 	
 }

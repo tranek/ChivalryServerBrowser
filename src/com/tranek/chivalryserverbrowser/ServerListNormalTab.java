@@ -39,7 +39,7 @@ public class ServerListNormalTab extends JPanel implements ServerListInterface {
 		
 		if ( refresher != null && refresher.isRefreshing()) {
 			//refresher.stop();
-			refresher.stopRefreshing(mw);
+			refresher.stopRefreshing();
 			mw.printlnMC("Stopping from refresh function. If you see this message, please let me know on the forums >:(");
 		}
 		
@@ -277,6 +277,16 @@ public class ServerListNormalTab extends JPanel implements ServerListInterface {
 			return false;
 		}	
 		return refresher.isRefreshing();
+	}
+
+	@Override
+	public ServerFilters getFilters() {
+		return sf;
+	}
+
+	@Override
+	public DefaultTableModel getTableModel() {
+		return (DefaultTableModel)(st.dataModel);
 	}
 	
 }
