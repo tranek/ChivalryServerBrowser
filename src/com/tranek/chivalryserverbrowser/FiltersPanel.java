@@ -35,6 +35,7 @@ import javax.swing.text.Document;
  */
 @SuppressWarnings("serial")
 public class FiltersPanel extends JPanel {
+	
 	/** MainWindow for its utility functions. */
 	private MainWindow mw;
 	/** The server name filter. It converts everything to lowercase and matches

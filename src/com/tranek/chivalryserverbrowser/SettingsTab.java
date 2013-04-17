@@ -35,6 +35,7 @@ import javax.swing.text.Document;
  */
 @SuppressWarnings("serial")
 public class SettingsTab extends JPanel {
+	
 	/** A reference to the MainWindow for its utility methods. */
 	protected MainWindow mw;
 	/** The JPanel for settings relating to the Steam Community. */

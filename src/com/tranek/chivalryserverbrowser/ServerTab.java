@@ -35,6 +35,7 @@ import com.github.koraktor.steamcondenser.steam.SteamPlayer;
  */
 @SuppressWarnings("serial")
 public class ServerTab extends JPanel{
+	
 	/** The ChivServer for this tab. */
 	private final ChivServer cs;
 	/** The JTable for the list of players currently on the server. */

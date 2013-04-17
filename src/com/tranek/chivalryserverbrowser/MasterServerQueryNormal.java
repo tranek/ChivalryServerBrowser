@@ -4,8 +4,19 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
+/**
+ * 
+ * Controls the low level refreshing for normal servers.
+ *
+ */
 public class MasterServerQueryNormal extends MasterServerQuery {
 	
+	/**
+	 * Creates a new MasterServerQueryNormal
+	 * 
+	 * @param mw the MainWindow
+	 * @param sf the server filters for querying the servers
+	 */
 	public MasterServerQueryNormal(MainWindow mw, ServerFilters sf) {
 		super(mw, sf);
 	}

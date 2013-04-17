@@ -7,13 +7,28 @@ import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteStatement;
 
+/**
+ * 
+ * Controls the low level refreshing for recently joined (history) servers.
+ *
+ */
 public class MasterServerQueryHistory extends MasterServerQuery {
 
-	
+	/**
+	 * Creates a new MasterServerQueryHistory
+	 * 
+	 * @param mw the MainWindow
+	 * @param sf the server filters for querying the servers
+	 */
 	public MasterServerQueryHistory(MainWindow mw, ServerFilters sf) {
 		super(mw, sf);
 	}
 	
+	/**
+	 * Calls {@link #getHistory()} to get the server history.
+	 * 
+	 * @see #getHistory()
+	 */
 	@Override
 	public Vector<ChivServer> getServers() throws IOException {
 		return getHistory();
@@ -24,6 +39,15 @@ public class MasterServerQueryHistory extends MasterServerQuery {
 		return mw.serversHist;
 	}
 	
+	/**
+	 * Gets server history from the local database.
+	 * 
+	 * @return a {@link Vector} of the {@link ChivServer}
+	 * @see ChivServer
+	 * @see SQLiteConnection
+	 * @see SQLiteStatement
+	 * @see SQLiteException
+	 */
 	public Vector<ChivServer> getHistory() {
 		Vector<ChivServer> serversHist = new Vector<ChivServer>();
 		SQLiteConnection db = new SQLiteConnection(new File("browserdb"));

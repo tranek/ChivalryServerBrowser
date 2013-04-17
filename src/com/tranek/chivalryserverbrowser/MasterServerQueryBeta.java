@@ -8,8 +8,19 @@ import net.barkerjr.gameserver.valve.SourceServer;
 import net.barkerjr.gameserver.valve.SourceServerList;
 import net.barkerjr.gameserver.valve.ValveServerList;
 
+/**
+ * 
+ * Controls the low level refreshing for beta servers.
+ *
+ */
 public class MasterServerQueryBeta extends MasterServerQuery {
 	
+	/**
+	 * Creates a new MasterServerQueryBeta
+	 * 
+	 * @param mw the MainWindow
+	 * @param sf the server filters for querying the servers
+	 */
 	public MasterServerQueryBeta(MainWindow mw, ServerFilters sf) {
 		super(mw, sf);
 	}

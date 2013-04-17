@@ -4,15 +4,38 @@ import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
+/**
+ * 
+ * The thread responsible for querying a specific server to get its data and location.
+ *
+ */
 class QueryWorker implements Callable<ChivServer> {
+	
+	/** The ChivServer that is created after the server is queried. */
 	private ChivServer cs;
+	/** The server IP address. */
 	private String sip;
+	/** The server's queryport. */
 	private int sport;
+	/** The server filters used to filter this query. */
 	private ServerFilters sf;
-	public ExecutorService pool;
+	/** The pool of threads that this QueryWorker belongs to. */
+	protected ExecutorService pool;
+	/** The synchronization object for adding to the server list table and the list of currently queried servers. */
 	private QueryWorkerSynch synch;
+	/** A reference to the MainWindow. */
 	private MainWindow mw;
 	
+	/**
+	 * Creates a new QueryWorker.
+	 * 
+	 * @param ip the IP address of the server
+	 * @param port the queryport of the server
+	 * @param sf the server filters to filter this server with
+	 * @param synch the synchronization object
+	 * @param pool the pool of threads that this QueryWorker belongs to
+	 * @param mw the MainWindow
+	 */
 	public QueryWorker(String ip, int port, ServerFilters sf, QueryWorkerSynch synch, ExecutorService pool, MainWindow mw) {
 		sip = ip;
 		sport = port;
@@ -22,6 +45,16 @@ class QueryWorker implements Callable<ChivServer> {
 		this.mw = mw;
 	}
 	
+	/**
+	 * Creates a new {@link QueryServerCondenser} to query the server. It then gets the server's location and adds
+	 * the information to the server list table and to the {@link MainWindow}'s list of currently queried servers.
+	 * 
+	 * @see Callable#call()
+	 * @see QueryServerCondenser#getInfo()
+	 * @see ChivServer#getGameMode(String)
+	 * @see ChivServer#getLocation(MainWindow, String)
+	 * @see QueryWorkerSynch
+	 */
 	@Override
 	public ChivServer call() throws Exception {
 		QueryServerCondenser qsc = new QueryServerCondenser(sip, sport);

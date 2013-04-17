@@ -59,7 +59,8 @@ import javax.swing.plaf.basic.BasicButtonUI;
  */ 
 @SuppressWarnings("serial")
 public class ButtonTabComponent extends JPanel {
-    private final JTabbedPane pane;
+    
+	private final JTabbedPane pane;
 
     public ButtonTabComponent(final JTabbedPane pane) {
         //unset default FlowLayout' gaps

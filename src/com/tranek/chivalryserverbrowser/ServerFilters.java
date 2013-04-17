@@ -6,6 +6,7 @@ package com.tranek.chivalryserverbrowser;
  *
  */
 public class ServerFilters {
+	
 	/** Server name filter. */
 	protected String name;
 	/** Game mode filter. */

@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
  */
 @SuppressWarnings("serial")
 public class GamepadSensitivityDialog extends JDialog {
+	
 	/** A reference to the MainWindow for its utility methods. */
 	private final MainWindow mw;
 	/** The JSpinner to change the value for the left to right sensitivity. */

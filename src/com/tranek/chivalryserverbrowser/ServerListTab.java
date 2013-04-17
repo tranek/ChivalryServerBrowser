@@ -11,16 +11,32 @@ import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteStatement;
 
+/**
+ * 
+ * Superclass for the server list tabs. All server list tabs must extend this class.
+ *
+ */
 @SuppressWarnings("serial")
 public abstract class ServerListTab extends JPanel implements ServerListInterface {
 
+	/** A reference to the MainWindow. */
 	protected final MainWindow mw;
+	/** The server filters for this server list. */
 	protected final ServerFilters sf = new ServerFilters();
+	/** The refresher for this server list. */
 	protected Refresher refresher;
+	/** The filters panel for this server list. */
 	protected final FiltersPanel fp;
+	/** The server table for this server list. */
 	protected final ServerTable st;
+	/** The name of this server list's filter database. */
 	protected String filterTableName;
 	
+	/**
+	 * Creates a new ServerListTab.
+	 * 
+	 * @param mw the MainWindow
+	 */
 	public ServerListTab(MainWindow mw) {
 		super();
 		this.mw = mw;
@@ -29,12 +45,21 @@ public abstract class ServerListTab extends JPanel implements ServerListInterfac
 		initialize();
 	}
 	
+	/**
+	 * Sets up the {@link JPanel} layout and adds the {@link FiltersPanel} and
+	 * {@link ServerTable} to it.
+	 */
 	public void initialize() {
 		setLayout(new BorderLayout(0, 0));
 		add(st, BorderLayout.NORTH);
 		add(fp, BorderLayout.CENTER);
 	}
 	
+	/**
+	 * Refreshes the server list. It does a final check to make sure that its refresher
+	 * has been stopped before updating the server filters, clearing the table, and then
+	 * calling {@link #startRefresher()}.
+	 */
 	@Override
 	public void RefreshServers() {
 		if ( refresher != null && refresher.isRefreshing()) {
@@ -49,8 +74,14 @@ public abstract class ServerListTab extends JPanel implements ServerListInterfac
 		startRefresher();
 	}
 	
-	public abstract void startRefresher();
+	/**
+	 * Refreshes the server list.
+	 */
+	protected abstract void startRefresher();
 	
+	/**
+	 * Updates the {@link ServerFilters} from the {@link FiltersPanel}.
+	 */
 	public void updateFilters() {
 		sf.name = fp.serverNameFilter.getText();
 		sf.type = (String) fp.gameModeList.getSelectedItem();
@@ -77,6 +108,22 @@ public abstract class ServerListTab extends JPanel implements ServerListInterfac
 		sf.numThreads = (int) fp.spNumThreads.getValue();
 	}
 		
+	/**
+	 * Sets the {@link FiltersPanel} values. This is typically called after loading
+	 * the saved filter settings from the database.
+	 * 
+	 * @param name the server name filter
+	 * @param type the gamemode filter
+	 * @param minrank the server's minimum rank filter
+	 * @param maxrank the server's maximum rank filter
+	 * @param maxping the server's maximum ping filter
+	 * @param hidepassword hide servers with a password filter
+	 * @param hideempty hide empty servers filter
+	 * @param hidefull hide full servers filter
+	 * @param officialonly show only official servers filter
+	 * @param perspective the server's allowed player perspectives filter
+	 * @param numthreads the number of threads to query servers with
+	 */
 	public void setUIFilters(String name, String type, int minrank, int maxrank,
 			int maxping, boolean hidepassword, boolean hideempty, boolean hidefull,
 			boolean officialonly, int perspective, int numthreads) {
@@ -112,6 +159,10 @@ public abstract class ServerListTab extends JPanel implements ServerListInterfac
 		fp.spNumThreads.setValue(numthreads);
 	}
 	
+	/**
+	 * Load the server filters from the database and call 
+	 * {@link #setUIFilters(String, String, int, int, int, boolean, boolean, boolean, boolean, int, int)}
+	 */
 	public void loadFilters() {
 		SQLiteConnection db = new SQLiteConnection(new File("browserdb"));
 		try {
@@ -198,6 +249,9 @@ public abstract class ServerListTab extends JPanel implements ServerListInterfac
 		db.dispose();
 	}
 	
+	/**
+	 * Call {@link #updateFilters()} and then save the server filters to the database.
+	 */
 	public void saveFilters() {
 		updateFilters();
 		
@@ -259,24 +313,45 @@ public abstract class ServerListTab extends JPanel implements ServerListInterfac
 		db.dispose();
 	}
 	
+	/**
+	 * Get the reference to the {@link MainWindow}.
+	 */
 	@Override
 	public MainWindow getMW() {
 		return mw;
 	}
 
+	/**
+	 * Get this server list tab's currently queried server list from the {@link MainWindow}.
+	 * 
+	 * @see ChivServer
+	 */
 	@Override
 	public abstract Vector<ChivServer> getServerList();
 
+	/**
+	 * Get a reference to this server list's {@link ServerFilters}.
+	 */
 	@Override
 	public ServerFilters getFilters() {
 		return sf;
 	}
 
+	/**
+	 * Get this server lists table model.
+	 * 
+	 * @see DefaultTableModel
+	 */
 	@Override
 	public DefaultTableModel getTableModel() {
 		return (DefaultTableModel)(st.dataModel);
 	}
 
+	/**
+	 * Gets whether or not this server list is currently refreshing.
+	 * 
+	 * @see Refresher#isRefreshing()
+	 */
 	@Override
 	public boolean isRefreshing() {
 		if ( refresher == null ) {

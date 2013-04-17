@@ -35,6 +35,7 @@ import javax.swing.table.TableModel;
  */
 @SuppressWarnings("serial")
 public class GamepadKeybindDialog extends JDialog {
+	
 	/** 
 	 * The name of the button.
 	 * 

@@ -28,6 +28,7 @@ import javax.swing.table.TableRowSorter;
  */
 @SuppressWarnings("serial")
 public class ServerTable extends JScrollPane {
+	
 	/** The JTable that contains all of the queried servers. */
 	private JTable serverListTable;
 	/** The data model for the server list table. */

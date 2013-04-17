@@ -16,6 +16,7 @@ import javax.swing.JPanel;
  */
 @SuppressWarnings("serial")
 public class GamepadKeybindTab extends JPanel {
+	
 	/** Reference to the MainWindow for its utility methods. */
 	private final MainWindow mw;
 	

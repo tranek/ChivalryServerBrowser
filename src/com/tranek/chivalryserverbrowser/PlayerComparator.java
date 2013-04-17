@@ -9,6 +9,7 @@ import java.util.Comparator;
  *
  */
 public class PlayerComparator implements Comparator<String> {
+	
 	/**
 	 * Parses out the first integer (current players) and compares
 	 * them as integers would be compared normally.

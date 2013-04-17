@@ -8,6 +8,7 @@ import java.util.ArrayList;
  *
  */
 public class SteamProfile {
+	
 	/** The URL of the Steam Community profile page of the user. */
 	protected String url;
 	/** The Steam nickname of the user. */

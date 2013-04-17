@@ -15,6 +15,7 @@ import com.github.koraktor.steamcondenser.steam.servers.SourceServer;
  *
  */
 public class ServerQuery {
+	
 	/** The IP address of the server. */
 	private String ip;
 	/** The queryport of the server. */

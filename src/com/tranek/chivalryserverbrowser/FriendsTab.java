@@ -37,6 +37,7 @@ import javax.swing.table.TableRowSorter;
  */
 @SuppressWarnings("serial")
 public class FriendsTab extends JPanel {
+	
 	/** A reference to the MainWindow. */
 	protected final MainWindow mw;
 	/** A reference to itself to pass to the {@link FriendQuery}. */

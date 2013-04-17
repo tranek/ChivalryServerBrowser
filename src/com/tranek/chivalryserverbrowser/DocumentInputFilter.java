@@ -13,8 +13,8 @@ import javax.swing.text.DocumentFilter;
  * 
  * @see "http://stackoverflow.com/questions/9477354/how-to-allow-introducing-only-digits-in-jtextfield"
  */
-class DocumentInputFilter extends DocumentFilter
-{
+class DocumentInputFilter extends DocumentFilter {
+	
     public void insertString(FilterBypass fb
                 , int offset, String text, AttributeSet as) throws BadLocationException {
         int len = text.length();

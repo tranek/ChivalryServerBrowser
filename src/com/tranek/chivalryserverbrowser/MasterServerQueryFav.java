@@ -7,12 +7,28 @@ import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteStatement;
 
+/**
+ * 
+ * Controls the low level refreshing for favorite servers.
+ *
+ */
 public class MasterServerQueryFav extends MasterServerQuery {
 	
+	/**
+	 * Creates a new MasterServerQueryFav
+	 * 
+	 * @param mw the MainWindow
+	 * @param sf the server filters for querying the servers
+	 */
 	public MasterServerQueryFav(MainWindow mw, ServerFilters sf) {
 		super(mw, sf);
 	}
 	
+	/**
+	 * Calls {@link #getFavorites()} to get the favorite servers.
+	 * 
+	 * @see #getFavorites()
+	 */
 	@Override
 	public Vector<ChivServer> getServers() throws IOException {
 		return getFavorites();
@@ -23,6 +39,15 @@ public class MasterServerQueryFav extends MasterServerQuery {
 		return mw.serversFav;
 	}
 	
+	/**
+	 * Gets favorite servers from the local database.
+	 * 
+	 * @return a {@link Vector} of the {@link ChivServer}
+	 * @see ChivServer
+	 * @see SQLiteConnection
+	 * @see SQLiteStatement
+	 * @see SQLiteException
+	 */
 	public Vector<ChivServer> getFavorites() {
 		Vector<ChivServer> serversFav = new Vector<ChivServer>();
 		SQLiteConnection db = new SQLiteConnection(new File("browserdb"));

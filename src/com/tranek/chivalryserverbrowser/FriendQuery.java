@@ -25,6 +25,7 @@ import com.github.koraktor.steamcondenser.steam.community.XMLData;
  *
  */
 public class FriendQuery extends Thread {
+	
 	/** URL for the user's Steam Community page. */
 	protected String url;
 	/** Data structure for the user's Steam profile. */
