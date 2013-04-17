@@ -17,7 +17,7 @@ import net.barkerjr.gameserver.valve.SourceServer;
 import net.barkerjr.gameserver.valve.SourceServerList;
 import net.barkerjr.gameserver.valve.ValveServerList;
 
-public class MasterServerQuery {
+public abstract class MasterServerQuery {
 	protected final MainWindow mw;
 	protected ServerFilters sf;
 	public ExecutorService pool;

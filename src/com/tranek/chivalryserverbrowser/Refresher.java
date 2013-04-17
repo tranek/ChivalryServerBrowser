@@ -3,7 +3,7 @@ package com.tranek.chivalryserverbrowser;
 import java.util.Vector;
 
 
-public class Refresher extends Thread {
+public abstract class Refresher extends Thread {
 	protected MainWindow mw;
 	private ServerListInterface sl;
 	protected MasterServerQuery msq;
@@ -11,7 +11,6 @@ public class Refresher extends Thread {
 	public Refresher(MainWindow mw, ServerListInterface sl) {
 		this.mw = mw;
 		this.sl = sl;
-		msq = new MasterServerQuery(mw, sl.getFilters());
 	}
 	
 	public void run() {
