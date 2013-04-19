@@ -275,7 +275,7 @@ public class FindPlayerTab extends JPanel {
 				if ( fpq != null && fpq.isRefreshing() ) {
 					stopRefreshing();
 				}
-				
+				fpq = new FindPlayerQuerier(this);
 				fpq.start();
 			} else {
 				mw.printlnMC("Missing player nickname! Getting the Steam Community info must have failed.");
