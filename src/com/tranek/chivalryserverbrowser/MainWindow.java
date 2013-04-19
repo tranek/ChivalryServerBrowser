@@ -103,6 +103,8 @@ public class MainWindow {
 	protected JPanel gamepadKeybindTab;
 	/** Tab for settings. */
 	protected SettingsTab settingsTab;
+	/** Tab for finding a player. */
+	protected FindPlayerTab findPlayerTab;
 	/** The JFXPanel that hosts the embedded web browser for the map. */
 	protected JFXPanel browserFxPanel;
 	/** WebEngine for the map. */
@@ -260,6 +262,8 @@ public class MainWindow {
 		gamepadKeybindTab = wrapInBackgroundImage(new GamepadKeybindTab(mw), 
 				new ImageIcon(getClass().getResource("images/gamepad.png")));
 		tabbedPane.addTab("Gamepad Keybinds", null, gamepadKeybindTab, null);
+		findPlayerTab = new FindPlayerTab(this);
+		tabbedPane.addTab("Find Player", null, findPlayerTab, null);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmChivalryServers.getContentPane().add(menuBar, BorderLayout.NORTH);
@@ -762,6 +766,7 @@ public class MainWindow {
 		if ( serverListHistoryTab.refresher != null ) {
 			serverListHistoryTab.refresher.stopRefreshing();
 		}
+		//TODO add findplayertab
 	}
 
 	/**
