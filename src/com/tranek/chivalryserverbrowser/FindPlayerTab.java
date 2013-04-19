@@ -12,8 +12,10 @@ import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -64,6 +66,35 @@ public class FindPlayerTab extends JPanel {
 		tfURL.setBounds(196, 10, 619, 22);
 		add(tfURL);
 		tfURL.setColumns(10);
+		tfURL.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if ( e.getButton() == MouseEvent.BUTTON3 ) {
+					JPopupMenu rmbURLPopup = new JPopupMenu();
+					JMenuItem popPaste = new JMenuItem("Paste");
+					popPaste.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+							Transferable contents = clipboard.getContents(null);
+						    boolean hasTransferableText =
+						      (contents != null) &&
+						      contents.isDataFlavorSupported(DataFlavor.stringFlavor);
+						    if ( hasTransferableText ) {
+						    	try {
+									String result = (String)contents.getTransferData(DataFlavor.stringFlavor);
+									tfURL.setText(result);
+								} catch (UnsupportedFlavorException
+										| IOException e1) {
+									e1.printStackTrace();
+								} 
+						    }
+						}
+					});
+					rmbURLPopup.add(popPaste);
+					rmbURLPopup.show(tfURL, e.getPoint().x, e.getPoint().y);
+				}
+			}
+		});
 		
 		JButton btnFindPlayer = new JButton("Find Player");
 		btnFindPlayer.addActionListener(new ActionListener() {
