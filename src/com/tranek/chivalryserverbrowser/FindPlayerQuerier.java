@@ -6,19 +6,18 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import javax.swing.table.DefaultTableModel;
 
-import com.github.koraktor.steamcondenser.steam.SteamPlayer;
-
 import net.barkerjr.gameserver.GameServer.Request;
 import net.barkerjr.gameserver.valve.SourceServer;
 import net.barkerjr.gameserver.valve.SourceServerList;
 import net.barkerjr.gameserver.valve.ValveServerList;
+
+import com.github.koraktor.steamcondenser.steam.SteamPlayer;
 
 public class FindPlayerQuerier extends Thread {
 
@@ -34,8 +33,9 @@ public class FindPlayerQuerier extends Thread {
 	}
 	
 	public void run() {
-		pool = Executors.newFixedThreadPool(64);
+		pool = Executors.newFixedThreadPool(32);
 		synch = new Synchronizer((DefaultTableModel)fpt.dataModel, fpt.servers);
+		slist = new Vector<ChivServer>();
 		
 		SourceServerList list = new SourceServerList();
 		list.gameDir = "chivalrymedievalwarfare";
@@ -64,14 +64,19 @@ public class FindPlayerQuerier extends Thread {
 		
 		// Iterate through the results and compile into one list
 		// Synchronizes this thread with its spawned threads
-	    for ( Future<ChivServer> future : set ) {
+	    /*for ( Future<ChivServer> future : set ) {
 	    	try {
-	    		ChivServer cs;
-				if ( (cs = future.get()) != null && slist != null ) {
-					slist.add(cs);
+				if ( future.get() != null ) {
+					slist.add(future.get());
 				}
 			} catch (ExecutionException | InterruptedException e) {}
-	    }
+	    }*/
+		
+		while ( !pool.isTerminated() ) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {}
+		}
 	    
 	    if ( fpt.servers.size() < 1 ) {
 	    	fpt.getMW().printlnMC("Did not find player on any server.");
