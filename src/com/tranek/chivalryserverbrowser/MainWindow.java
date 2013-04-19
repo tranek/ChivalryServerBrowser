@@ -766,6 +766,9 @@ public class MainWindow {
 		if ( serverListHistoryTab.refresher != null ) {
 			serverListHistoryTab.refresher.stopRefreshing();
 		}
+		if ( findPlayerTab != null ) {
+			findPlayerTab.stopRefreshing();
+		}
 		//TODO add findplayertab
 	}
 

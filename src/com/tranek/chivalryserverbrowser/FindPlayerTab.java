@@ -257,7 +257,7 @@ public class FindPlayerTab extends JPanel {
 		JButton btnStop = new JButton("Stop");
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				stop();
+				stopRefreshing();
 			}
 		});
 		btnStop.setBounds(848, 47, 97, 25);
@@ -273,7 +273,7 @@ public class FindPlayerTab extends JPanel {
 				mw.printlnMC("Retrieved Steam Community info.");
 				mw.printlnMC("Querying Master Server to find player...");
 				if ( fpq != null && fpq.isRefreshing() ) {
-					stop();
+					stopRefreshing();
 				}
 				
 				fpq.start();
@@ -308,9 +308,10 @@ public class FindPlayerTab extends JPanel {
 		return success;
 	}
 	
-	public void stop() {
-		if ( fpq != null && fpq.pool != null ) {
-			fpq.pool.shutdownNow();
+	public void stopRefreshing() {
+		if ( fpq != null ) {
+			fpq.terminate();
+			mw.printlnMC("Canceled search for player.");
 		}
 	}
 	
