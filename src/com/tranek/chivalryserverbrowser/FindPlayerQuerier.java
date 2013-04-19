@@ -127,6 +127,10 @@ public class FindPlayerQuerier extends Thread {
 				}
 			}
 			
+			if ( pool.isShutdown() ) {
+				return null;
+			}
+			
 			if ( foundPlayer ) {
 				QueryServerCondenser qsc = new QueryServerCondenser(ip, queryport);
 				HashMap<String, String> info = qsc.getInfo();

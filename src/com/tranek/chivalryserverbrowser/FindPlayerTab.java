@@ -38,6 +38,7 @@ import com.github.koraktor.steamcondenser.steam.community.XMLData;
 public class FindPlayerTab extends JPanel {
 
 	private final MainWindow mw;
+	private final FindPlayerTab fpt;
 	private JTextField tfURL;
 	protected Vector<ChivServer> servers;
 	private JTable tblServers;
@@ -51,6 +52,7 @@ public class FindPlayerTab extends JPanel {
 	public FindPlayerTab(MainWindow mw) { 
 		super();
 		this.mw = mw;
+		fpt = this;
 		fpq = new FindPlayerQuerier(this);
 		initialize();
 	}
@@ -288,7 +290,7 @@ public class FindPlayerTab extends JPanel {
 		JButton btnStop = new JButton("Stop");
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				stopRefreshing();
+				stop();
 			}
 		});
 		btnStop.setBounds(848, 47, 97, 25);
@@ -296,24 +298,28 @@ public class FindPlayerTab extends JPanel {
 	}
 	
 	public void findPlayer() {
-		mw.stopAllRefreshing();
-		servers = new Vector<ChivServer>();
-		mw.printlnMC("Getting Steam Community info...");
-		if ( querySteamCommunity(tfURL.getText()) ) {
-			if ( !lblNickName.getText().equals("") ) {
-				mw.printlnMC("Retrieved Steam Community info.");
-				mw.printlnMC("Querying Master Server to find player...");
-				if ( fpq != null && fpq.isRefreshing() ) {
-					stopRefreshing();
+		new Thread() {
+			public void run() {
+				mw.stopAllRefreshing();
+				servers = new Vector<ChivServer>();
+				mw.printlnMC("Getting Steam Community info...");
+				if ( querySteamCommunity(tfURL.getText()) ) {
+					if ( !lblNickName.getText().equals("") ) {
+						mw.printlnMC("Retrieved Steam Community info.");
+						mw.printlnMC("Querying Master Server to find player...");
+						if ( fpq != null && fpq.isRefreshing() ) {
+							stopRefreshing();
+						}
+						fpq = new FindPlayerQuerier(fpt);
+						fpq.start();
+					} else {
+						mw.printlnMC("Missing player nickname! Getting the Steam Community info must have failed.");
+					}
+				} else {
+					mw.printlnMC("Failed to get Steam Community info.");
 				}
-				fpq = new FindPlayerQuerier(this);
-				fpq.start();
-			} else {
-				mw.printlnMC("Missing player nickname! Getting the Steam Community info must have failed.");
 			}
-		} else {
-			mw.printlnMC("Failed to get Steam Community info.");
-		}
+		}.start();
 	}
 	
 	public boolean querySteamCommunity(String url) {
@@ -337,6 +343,10 @@ public class FindPlayerTab extends JPanel {
 			e.printStackTrace();
 		}
 		return success;
+	}
+	
+	public void stop() {
+		mw.stopAllRefreshing();
 	}
 	
 	public void stopRefreshing() {
