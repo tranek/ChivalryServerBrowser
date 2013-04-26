@@ -286,7 +286,7 @@ public class FriendsTab extends JPanel {
 	 * unchecked to refresh the list of Steam friends.
 	 */
 	public void refreshFriends() {
-		if ( fq != null && !fq.pool.isShutdown() ) {
+		if ( fq != null && fq.pool != null && !fq.pool.isShutdown() ) {
 			fq.pool.shutdownNow();
 		}
 		mw.serversFriends = new Vector<ChivServer>();
