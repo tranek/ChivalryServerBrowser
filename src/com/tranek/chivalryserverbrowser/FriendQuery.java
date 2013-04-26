@@ -260,6 +260,7 @@ public class FriendQuery extends Thread {
 	            synch.addToList(friendProfile);
 	            //System.out.println(nickname + ": " + stateMessage);
 	            
+	            
 	            Object[] rowData = {nickname, stateMessage, "", "", "", "", ""};
 	            if ( inChiv && checkIfInChivalry(stateMessage)) {
 	            	// Currently playing on a Chivalry server and showing only those in Chivalry
@@ -389,13 +390,24 @@ public class FriendQuery extends Thread {
 			String status = "Playing " + game;
 			details[1] = "";
 			if ( game.equals("Chivalry: Medieval Warfare") ) {
-				String ipstr = stateMessage.substring(stateMessage.indexOf("href="));
-				ipstr = ipstr.substring(22, ipstr.indexOf(">")-1);
-				ipstr = "<html><U><FONT COLOR=BLUE>" + ipstr + "</FONT></U></html>";
-				details[1] = ipstr;
+				int index = stateMessage.indexOf("href=");
+				if ( index > -1 ) {
+					String ipstr = stateMessage.substring(index);
+					ipstr = ipstr.substring(22, ipstr.indexOf(">")-1);
+					ipstr = "<html><U><FONT COLOR=BLUE>" + ipstr + "</FONT></U></html>";
+					details[1] = ipstr;
+				} else {
+					index = stateMessage.indexOf("window.location=");
+					if ( index > -1 ) {
+						String ipstr = stateMessage.substring(index);
+						ipstr = ipstr.substring(33);
+						ipstr = ipstr.substring(0, ipstr.indexOf("'"));
+						ipstr = "<html><U><FONT COLOR=BLUE>" + ipstr + "</FONT></U></html>";
+						details[1] = ipstr;
+					}
+				}
 			}
 			details[0] = status;
-			
 			return details;
 		}
 		
@@ -411,11 +423,23 @@ public class FriendQuery extends Thread {
 			String[] details = new String[2];
 			String game = stateMessage.substring(13, stateMessage.indexOf("<span class")).trim();
 			String status = "Playing " + game;
-			String ipstr = stateMessage.substring(stateMessage.indexOf("href="));
-			ipstr = ipstr.substring(22, ipstr.indexOf(">")-1);
-			ipstr = "<html><U><FONT COLOR=BLUE>" + ipstr + "</FONT></U></html>";
+			int index = stateMessage.indexOf("href=");
+			if ( index > -1 ) {
+				String ipstr = stateMessage.substring(index);
+				ipstr = ipstr.substring(22, ipstr.indexOf(">")-1);
+				ipstr = "<html><U><FONT COLOR=BLUE>" + ipstr + "</FONT></U></html>";
+				details[1] = ipstr;
+			} else {
+				index = stateMessage.indexOf("window.location=");
+				if ( index > -1 ) {
+					String ipstr = stateMessage.substring(index);
+					ipstr = ipstr.substring(33);
+					ipstr = ipstr.substring(0, ipstr.indexOf("'"));
+					ipstr = "<html><U><FONT COLOR=BLUE>" + ipstr + "</FONT></U></html>";
+					details[1] = ipstr;
+				}
+			}
 			details[0] = status;
-			details[1] = ipstr;
 			return details;
 		}
 	}
