@@ -153,7 +153,8 @@ class QueryWorker implements Callable<ChivServer> {
 		}
 		
 		if ( sf.officialservers && ( sf.type.equals("All") || sf.type.equals(gamemode) ) ) {
-			if ( (sName.length() >  23) && ( sName.substring(0, 20).equals("official duel server") ||
+			if ( (sName.length() >  26) && ( sName.substring(0, 20).equals("official duel server") ||
+				sName.substring(0, 26).equals("official classic rank 1-20") ||
 				sName.substring(0, 23).equals("official classic server") ||
 				sName.substring(0, 19).equals("official ffa server") ||
 				sName.substring(0, 19).equals("official lts server") ||
