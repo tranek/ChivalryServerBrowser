@@ -151,8 +151,8 @@ public class ServerTable extends JScrollPane {
 						}
 					});
 					rmbServerPopup.add(popInfo);
-					JMenuItem popCopy = new JMenuItem("Copy server name to Clipboard");
-					popCopy.addActionListener(new ActionListener() {
+					JMenuItem popCopyName = new JMenuItem("Copy server name to Clipboard");
+					popCopyName.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -163,7 +163,22 @@ public class ServerTable extends JScrollPane {
 							});
 						}
 					});
-					rmbServerPopup.add(popCopy);
+					rmbServerPopup.add(popCopyName);
+					JMenuItem popCopyIP = new JMenuItem("Copy server IP:port to Clipboard");
+					popCopyIP.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+							String stripped = ((String)dataModel.getValueAt(row, 1)).substring(26);
+							stripped = stripped.split("<")[0];
+							StringSelection stringSelection = new StringSelection( stripped );
+							clipboard.setContents(stringSelection, new ClipboardOwner() {
+								@Override
+								public void lostOwnership(Clipboard clipboard, Transferable contents) {}
+							});
+						}
+					});
+					rmbServerPopup.add(popCopyIP);
 					JMenuItem popShowInMap = new JMenuItem("Show server in map");
 					popShowInMap.addActionListener(new ActionListener() {
 						@Override

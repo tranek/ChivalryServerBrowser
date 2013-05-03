@@ -88,8 +88,8 @@ public class ServerTab extends JPanel{
 						}
 					});
 					rmbServerPopup.add(popFav);
-					JMenuItem popCopy = new JMenuItem("Copy server name to Clipboard");
-					popCopy.addActionListener(new ActionListener() {
+					JMenuItem popCopyName = new JMenuItem("Copy server name to Clipboard");
+					popCopyName.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -100,7 +100,21 @@ public class ServerTab extends JPanel{
 							});
 						}
 					});
-					rmbServerPopup.add(popCopy);
+					rmbServerPopup.add(popCopyName);
+					JMenuItem popCopyIP = new JMenuItem("Copy server IP:port to Clipboard");
+					popCopyIP.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+							String ip = cs.mIP + ":" + cs.mGamePort;
+							StringSelection stringSelection = new StringSelection( ip );
+							clipboard.setContents(stringSelection, new ClipboardOwner() {
+								@Override
+								public void lostOwnership(Clipboard clipboard, Transferable contents) {}
+							});
+						}
+					});
+					rmbServerPopup.add(popCopyIP);
 					JMenuItem popShowInMap = new JMenuItem("Show server in map");
 					popShowInMap.addActionListener(new ActionListener() {
 						@Override
