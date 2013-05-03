@@ -259,7 +259,9 @@ public class FriendQuery extends Thread {
 	            SteamProfile friendProfile = new SteamProfile(friendURL, nickname, stateMessage);
 	            synch.addToList(friendProfile);
 	            //System.out.println(nickname + ": " + stateMessage);
-	            
+	            if ( nickname.equals("ia. | Sir Clayton Bigsby") ) {
+	            	System.out.println(nickname + ": " + stateMessage);
+	            }
 	            
 	            Object[] rowData = {nickname, stateMessage, "", "", "", "", ""};
 	            if ( inChiv && checkIfInChivalry(stateMessage)) {
@@ -317,8 +319,8 @@ public class FriendQuery extends Thread {
 	            		int index = ((String) rowData[1]).indexOf("<span");
 	            		rowData[1] = ((String) rowData[1]).substring(0, index);
 	            	}
-	            	if ( ((String) rowData[1]).contains("<br />") ) {
-	            		rowData[1] = ((String) rowData[1]).replace("<br />", " ");
+	            	if ( ((String) rowData[1]).contains("<br/>") ) {
+	            		rowData[1] = ((String) rowData[1]).replace("<br/>", " ");
 	            	}
 	            	synch.addToTable(rowData);
 	            }
@@ -343,15 +345,21 @@ public class FriendQuery extends Thread {
 		 */
 		public boolean checkIfInChivalry(String status) {
 			boolean ingame = false;
-			
-			if ( status.substring(0, 13).equals("In-Game<br />") ) {
-				String game = status.substring(13, status.indexOf("<span class")).trim();
+			//TODO changed to In-Game<br/>
+			if ( status.substring(0, 12).equals("In-Game<br/>") ) {
+				String game = status.substring(12, status.indexOf("<span class")).trim();
 				if (game.equals("Chivalry: Medieval Warfare")) {
 					ingame = true;
 				}
-				System.out.println(game);
-				String ipstr = status.substring(status.indexOf("href="));
-				ipstr = ipstr.substring(22, ipstr.indexOf(">")-1);
+				String ipstr = "";
+				if ( status.indexOf("href=") > -1 ) {
+					ipstr = status.substring(status.indexOf("href="));
+					ipstr = ipstr.substring(22, ipstr.indexOf(">")-1);
+				} else {
+					ipstr = status.substring(status.indexOf("window.location="));
+					ipstr = ipstr.substring(33);
+					ipstr = ipstr.substring(0, ipstr.indexOf("'"));
+				}
 				System.out.println(ipstr);
 			}
 			
@@ -370,7 +378,7 @@ public class FriendQuery extends Thread {
 			if ( status.length() < 14 ) {
 				return false;
 			}
-			if ( status.substring(0, 13).equals("In-Game<br />") ) {
+			if ( status.substring(0, 12).equals("In-Game<br/>") ) {
 				ingame = true;
 			}
 			return ingame;
@@ -386,7 +394,7 @@ public class FriendQuery extends Thread {
 		 */
 		public String[] getGameDetails(String stateMessage) {
 			String[] details = new String[2];
-			String game = stateMessage.substring(13, stateMessage.indexOf("<span class")).trim();
+			String game = stateMessage.substring(12, stateMessage.indexOf("<span class")).trim();
 			String status = "Playing " + game;
 			details[1] = "";
 			if ( game.equals("Chivalry: Medieval Warfare") ) {
@@ -421,7 +429,7 @@ public class FriendQuery extends Thread {
 		 */
 		public String[] getChivDetails(String stateMessage) {
 			String[] details = new String[2];
-			String game = stateMessage.substring(13, stateMessage.indexOf("<span class")).trim();
+			String game = stateMessage.substring(12, stateMessage.indexOf("<span class")).trim();
 			String status = "Playing " + game;
 			int index = stateMessage.indexOf("href=");
 			if ( index > -1 ) {
