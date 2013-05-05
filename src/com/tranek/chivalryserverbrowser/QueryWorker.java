@@ -153,18 +153,27 @@ class QueryWorker implements Callable<ChivServer> {
 		}
 		
 		if ( sf.officialservers && ( sf.type.equals("All") || sf.type.equals(gamemode) ) ) {
-			if ( (sName.length() >  26) && ( sName.substring(0, 20).equals("official duel server") ||
-				sName.substring(0, 26).equals("official classic rank 1-20") ||
-				sName.substring(0, 23).equals("official classic server") ||
-				sName.substring(0, 19).equals("official ffa server") ||
-				sName.substring(0, 19).equals("official lts server") ||
-				sName.substring(0, 19).equals("official tdm server") ||
-				sName.substring(0, 18).equals("official to server") ||
-				sName.substring(0, 20).equals("official beta server") ) ) {
-				
-				synch.addToTable(rowData);
-				synch.addToList(cs);
-				synch.addToMap(cs);
+			if (
+				(sName.length() > 23 && sName.substring(0, 24).equals("official duel ping limit") ) ||
+				(sName.length() > 19 && sName.substring(0, 20).equals("official duel server") ) ||
+				(sName.length() > 26 && sName.substring(0, 27).equals("official classic ping limit") ) ||
+				(sName.length() > 25 && sName.substring(0, 26).equals("official classic rank 1-20") ) ||
+				(sName.length() > 22 && sName.substring(0, 23).equals("official classic server") ) ||
+				(sName.length() > 22 && sName.substring(0, 23).equals("official ffa ping limit") ) ||
+				(sName.length() > 18 && sName.substring(0, 19).equals("official ffa server") ) ||
+				(sName.length() > 22 && sName.substring(0, 23).equals("official lts ping limit") ) ||
+				(sName.length() > 18 && sName.substring(0, 19).equals("official lts server") ) ||
+				(sName.length() > 22 && sName.substring(0, 23).equals("official tdm ping limit") ) ||
+				(sName.length() > 18 && sName.substring(0, 19).equals("official tdm server") ) ||
+				(sName.length() > 21 && sName.substring(0, 22).equals("official to ping limit") ) ||
+				(sName.length() > 17 && sName.substring(0, 18).equals("official to server") ) ||
+				(sName.length() > 19 && sName.substring(0, 20).equals("official beta server") ) ||
+				(sName.length() > 15 && sName.substring(0, 16).equals("official beta to") ) ||
+				(sName.length() > 16 && sName.substring(0, 17).equals("official beta  to") ) || // thanks Kimiko
+				(sName.length() > 18 && sName.substring(0, 19).equals("official beta duels") ) ) {
+					synch.addToTable(rowData);
+					synch.addToList(cs);
+					synch.addToMap(cs);
 			}
 		} else if ( cs.mName != null && cs.mName.toLowerCase().contains(serverNameFilter)
 				&& ( sf.type.equals("All") || sf.type.equals(gamemode) ) ) {
