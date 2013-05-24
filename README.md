@@ -1,4 +1,6 @@
 Chivalry: Medieval Warfare Alternate Server Browser
+===================================================
+
 http://www.chivalrythegame.com/forums/viewtopic.php?f=69&t=10664
 
 This application uses open source libraries to query the Master Steam Server and the game servers.
@@ -13,3 +15,5 @@ Thanks to:
 -Torn Banner Studios for making Chivalry: Medieval Warfare
 -gregcau http://www.chivalrythegame.com/forums/memberlist.php?mode=viewprofile&u=10401 for helping fix some bugs
 -The rest of the community on http://www.chivalrythegame.com/forums for finding and reporting bugs
+
+License: MIT except for the Steam Condenser and Game Server Library that have their own licenses.
