@@ -19,6 +19,7 @@ Thanks to ...
  * Torn Banner Studios for making Chivalry: Medieval Warfare
  * gregcau http://www.chivalrythegame.com/forums/memberlist.php?mode=viewprofile&u=10401 for helping fix some bugs
  * The rest of the community on http://www.chivalrythegame.com/forums for finding and reporting bugs
+ * Tom Banner of Tom Banner's Furniture and Computer Assembly
 
 License
 -------
