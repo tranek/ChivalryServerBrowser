@@ -10,12 +10,9 @@ Requirements
 Notes
 -----
 This application uses open source libraries to query the Master Steam Server and the game servers.
-Steam Condenser by koraktor
-http://koraktor.de/steam-condenser/
-https://github.com/koraktor/steam-condenser
+ * [Steam Condenser by koraktor] (https://github.com/koraktor/steam-condenser)
 
-Game Server Library by Barker Jr
-http://www.barkerjr.net/gameserver.html
+ * [Game Server Library by Barker Jr] (http://www.barkerjr.net/gameserver.html)
 
 Thanks to ...
 -------------
