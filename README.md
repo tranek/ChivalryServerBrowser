@@ -5,7 +5,7 @@ http://www.chivalrythegame.com/forums/viewtopic.php?f=69&t=10664
 
 Requirements
 ------------
-*Latest version of Java Development Kit 7
+ * Latest version of Java Development Kit 7
 
 Notes
 -----
@@ -19,9 +19,9 @@ http://www.barkerjr.net/gameserver.html
 
 Thanks to ...
 -------------
-*Torn Banner Studios for making Chivalry: Medieval Warfare
-*gregcau http://www.chivalrythegame.com/forums/memberlist.php?mode=viewprofile&u=10401 for helping fix some bugs
-*The rest of the community on http://www.chivalrythegame.com/forums for finding and reporting bugs
+ * Torn Banner Studios for making Chivalry: Medieval Warfare
+ * gregcau http://www.chivalrythegame.com/forums/memberlist.php?mode=viewprofile&u=10401 for helping fix some bugs
+ * The rest of the community on http://www.chivalrythegame.com/forums for finding and reporting bugs
 
 License
 -------
