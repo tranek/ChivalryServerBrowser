@@ -3,6 +3,10 @@ Chivalry: Medieval Warfare Alternate Server Browser
 
 http://www.chivalrythegame.com/forums/viewtopic.php?f=69&t=10664
 
+Requirements
+------------
+*Latest version of Java Development Kit 7
+
 Notes
 -----
 This application uses open source libraries to query the Master Steam Server and the game servers.
