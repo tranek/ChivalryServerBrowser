@@ -1,7 +1,7 @@
 Chivalry: Medieval Warfare Alternate Server Browser
 ===================================================
 
-http://www.chivalrythegame.com/forums/viewtopic.php?f=69&t=10664
+http://tornbanner.com/forums/viewtopic.php?f=69&t=10664
 
 Requirements
 ------------
@@ -17,8 +17,8 @@ This application uses open source libraries to query the Master Steam Server and
 Thanks to ...
 -------------
  * [Torn Banner Studios] (http://www.tornbanner.com/) for making Chivalry: Medieval Warfare
- * [gregcau] (http://www.chivalrythegame.com/forums/memberlist.php?mode=viewprofile&u=10401) for helping fix some bugs
- * The rest of the community on http://www.chivalrythegame.com/forums for finding and reporting bugs
+ * [gregcau] (http://tornbanner.com/forums/memberlist.php?mode=viewprofile&u=10401) for helping fix some bugs
+ * The rest of the community on http://tornbanner.com/forums/ for finding and reporting bugs
  * Tom Banner of Tom Banner's Furniture and Computer Assembly
 
 License
